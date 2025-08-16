@@ -16,7 +16,7 @@ const DrawingApp = () => {
   const imageCanvasRef = useRef(null); // Image canvas
 
   const [isDrawing, setIsDrawing] = useState(false);
-  const [prompt, setPrompt] = useState("Sunset with Mountains"); // Selected text prompt
+  const [prompt, setPrompt] = useState("Robot"); // Selected text prompt
   const [subPrompts, setSubPrompts] = useState([]); // Store related sub-prompts
   const [selectedSubPrompt, setSelectedSubPrompt] = useState(""); // Final selected sub-prompt
   const [finalPrompt, setFinalPrompt] = useState(""); // Final prompt combining prompt + line art text
@@ -280,7 +280,7 @@ const DrawingApp = () => {
       return null;
     }
 
-    const publicURL = `https://qwwolplytjytipjvooru.supabase.co/storage/v1/object/public/images/gurgaon/${fileName}`;
+    const publicURL = `https://olqlkvsmmzsjavlqbibd.supabase.co/storage/v1/object/public/images/gurgaon/${fileName}`;
     const { error: insertError } = await supabase
       .from("images")
       .insert([{ url: publicURL }]);
@@ -338,7 +338,7 @@ const DrawingApp = () => {
       formData.append("image", imageBlob, "drawing.png"); // Sending image as a binary Blob
 
       const response = await axios.post(
-        "https://orca-app-2y5um.ondigitalocean.app/generate-image/",
+        "http://localhost:5000/generate-image/",
         formData,
         {
           headers: {
@@ -353,8 +353,7 @@ const DrawingApp = () => {
         // Ensure the imageUrl has the correct format
         const generatedUrl = imageUrl.startsWith("http")
           ? imageUrl
-          : `https://orca-app-2y5um.ondigitalocean.app/${imageUrl}`;
-
+          : `http://localhost:5000/${imageUrl}`;
 
         console.log(generatedUrl, "generatedURL");
         setGeneratedImageUrl(generatedUrl); // Set the URL of the generated image
@@ -403,41 +402,40 @@ const DrawingApp = () => {
   const handlePromptSelect = (selectedPrompt) => {
     setPrompt(selectedPrompt);
     switch (selectedPrompt) {
-      case "Sunset with Mountains":
+      case "Space":
         setSubPrompts([
-          "A cottage surrounded by tall trees and blooming flowers.",
-          " A serene mountain scene with a cozy cottage by a river and wildlife.",
-          "Road with Houses and Cars A suburban street lined with houses, classic cars, and trees.",
-          "Riverside House: A house by a river, surrounded by pine trees and a wooden bridge.",
-          "Mountain Sunrise: Majestic mountains at sunrise, illuminating the hills and trees."
+          "Astronaut walking on Mars",
+          "Futuristic city on asteroid",
+          "Explorer on alien planet",
+          "Garden inside space dome"
 
         ]);
         break;
-      case "House":
+      case "Robot":
         setSubPrompts([
-          "Modern house on a cliffside",
-          "Cottage in a misty forest",
-          "Luxury mansion by the beach",
-          "Skyscraper in a busy metropolis",
-          "Skyscraper piercing through the clouds",
+          "Futuristic world under AI",
+          "Battle robot in arena",
+          "Giant robot guarding city",
+          "Humanoid robot repairing circuit",
+
         ]);
         break;
-      case "Automibile":
+      case "Drone":
         setSubPrompts([
-          "With a city skyline",
-          "Racing on a track",
-          "With a mountain backdrop",
-          "In a rustic farmyard",
-          "Racing through urban streets",
+          "Drone swarm over city",
+          "Futuristic world of drones",
+          "Skies patrolled by machines",
+          "Autonomous drones in war",
+ 
         ]);
         break;
-      case "Infrastructure":
+      case "SuperCore":
         setSubPrompts([
-          "A modern train bridge spanning over a river with a cityscape in the background.",
-          "An urban metro station bustling with commuters boarding and exiting trains.",
-          "A busy construction site with workers, cranes, and unfinished buildings.",
-          "A city skyline featuring metro tracks weaving between tall buildings.",
-          "A train bridge under construction, surrounded by scaffolding and heavy machinery."
+          "Supercore powering futuristic city",
+          "Energy core beneath world",
+          "Supercore meltdown in void",
+          "World sustained by supercore",
+
         ]);
         break;
       default:
@@ -564,7 +562,7 @@ const DrawingApp = () => {
 
   // Automatically select the default prompt when the component loads
   useEffect(() => {
-    handlePromptSelect("Sunset with Mountains"); // Set the default active prompt
+    handlePromptSelect("Space"); // Set the default active prompt
   }, []);
 
   return (
@@ -594,17 +592,7 @@ const DrawingApp = () => {
 
                 <div className="canvasContainer" style={{ position: "relative" }}>
                   {/* Logo Image */}
-                  <img
-                    src="/logo1.png"
-                    alt="Logo"
-                    style={{
-                      position: "absolute",
-                      top: "10px",
-                      right: "100px",
-                      width: "100px", // Adjust the size as needed
-                      zIndex: 10, // Make sure it appears above the canvases
-                    }}
-                  />
+                  
 
                   <canvas
                     ref={imageCanvasRef}
@@ -688,81 +676,83 @@ const DrawingApp = () => {
                   <div>
                     <div className="oggng">
                       <div></div>
+
                       <div
-                        onClick={() =>
-                          handlePromptSelect("Sunset with Mountains")
-                        }
+                        onClick={() => handlePromptSelect("Robot")}
                         className="selecttheme-cc"
                         style={{
                           border:
-                            prompt === "Sunset with Mountains"
+                            prompt === "Robot"
                               ? "2px solid #fff"
                               : "1px solid #ccc",
 
                           backgroundColor:
-                            prompt === "Sunset with Mountains"
+                            prompt === "Robot"
                               ? "#D12028"
                               : "transparent",
-                          color: prompt === "Sunset with Mountains" ? "#fff" : "#000",
+                          color: prompt === "Robot" ? "#fff" : "#000",
                         }}
                       >
-                        Nature
+                        Robot
                       </div>
 
                       <div
-                        onClick={() => handlePromptSelect("House")}
+                        onClick={() =>
+                          handlePromptSelect("Space")
+                        }
                         className="selecttheme-bb"
                         style={{
                           border:
-                            prompt === "House"
+                            prompt === "Space"
                               ? "2px solid #fff"
                               : "1px solid #ccc",
 
                           backgroundColor:
-                            prompt === "House"
+                            prompt === "Space"
                               ? "#D12028"
                               : "transparent",
-                          color: prompt === "House" ? "#fff" : "#000",
+                          color: prompt === "Space" ? "#fff" : "#000",
                         }}
                       >
-                        House
+                        Space
                       </div>
 
+
                       <div
-                        onClick={() => handlePromptSelect("Automibile")}
+                        onClick={() => handlePromptSelect("Drone")}
                         className="selecttheme-aa"
                         style={{
                           border:
-                            prompt === "Automibile"
+                            prompt === "Drone"
                               ? "2px solid #fff"
                               : "1px solid #ccc",
                           backgroundColor:
-                            prompt === "Automibile"
+                            prompt === "Drone"
                               ? "#D12028"
                               : "transparent",
-                          color: prompt === "Automibile" ? "#fff" : "#000",
+                          color: prompt === "Drone" ? "#fff" : "#000",
 
                         }}
                       >
-                        Automobile
+                        Drone
                       </div>
                       <div
-                        onClick={() => handlePromptSelect("Infrastructure")}
+                        onClick={() => handlePromptSelect("SuperCore")}
                         className="selecttheme-dd"
                         style={{
                           border:
-                            prompt === "Infrastructure"
+                            prompt === "SuperCore"
                               ? "2px solid #fff"
                               : "1px solid #ccc",
                           backgroundColor:
-                            prompt === "Infrastructure"
+                            prompt === "SuperCore"
                               ? "#D12028"
                               : "transparent",
-                          color: prompt === "Infrastructure" ? "#fff" : "#000",
+                          color: prompt === "SuperCore" ? "#fff" : "#000",
 
                         }}
                       >
-                        Infrastructure
+                        SuperCore
                       </div>
                     </div>
                   </div>
@@ -858,10 +848,6 @@ const DrawingApp = () => {
                     >
                       Fantasy Art
                     </button>
-
-
-
-
 
                     {/* Style Button 4 */}
                     <button
