@@ -97,7 +97,7 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
 .canvasff { z-index: 2; }
 
 /* Toolbar under stage */
-.downContainer { display: grid; gap: 16px; margin-top: 10%;}
+.downContainer { display: grid; gap: 16px; margin-top: 8%;}
 .brushRest {
   width: 100%;
   border: 1px solid #ffffff66;
@@ -106,7 +106,7 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
   background: #ffffff10;
   backdrop-filter: blur(2px);
 }
-.bothGContainer { display: grid; grid-auto-flow: column; gap: 14px; }
+.bothGContainer { display: grid; grid-auto-flow: column; gap: 14px; margin-top: 2%; }
 
 .brushButton, .resetButton {
   height: 54px;
@@ -117,12 +117,12 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
 .brushButton {
   border: 1px solid #fff;
   color: var(--panel-purple);
-  background: #fff;
+  background: #fff; padding-top: 30px; padding-bottom: 40px;
 }
 .resetButton {
   border: 1px solid #fff;
   color: #fff;
-  background: var(--panel-purple);
+  background: var(--panel-purple); padding: 30px;padding-bottom: 40px;
 }
 
 /* Right panel */
@@ -130,7 +130,7 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
   display: grid;
   grid-auto-rows: max-content;
   align-content: start;
-  height: 100%;
+  height: 10%;
   width: 100%;
   padding-right: 4px;
   margin-left: -15%;
@@ -138,7 +138,14 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
 
 .clasgg-h2 { color: #fff; font-weight: 700; font-size: 14px; letter-spacing: .2px; margin: 8px 0 0; }
 
+.imageResize-con {
+padding-top: 20px; padding-bottom: 20px;
+}
 /* Theme chips row */
+.theme {
+  padding-top: 20px; padding-bottom: 20px;
+}
+
 .mainthemcont { background: #fff; border-radius: 12px; padding: 8px; color: var(--text-dark); }
 .oggng { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
 .selecttheme-cc, .selecttheme-bb, .selecttheme-aa, .selecttheme-dd {
@@ -159,11 +166,13 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
 /* Style buttons grid */
 .whole-style-container { width: 100%; }
 .whole-style-container h2 { font-size: 14px; font-weight: 700; margin: 10px 0 8px; }
-.style-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.style-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding-top: 20px; padding-bottom: 20px;}
 .style-container button {
   height: 48px; background: transparent; border: 2px solid #fff; color: #fff; border-radius: 8px; font-size: 15px;
 }
-
+.buttonGG-rf {
+ padding: 10px 20px;
+}
 /* Line art selector tweaks */
 .whole-line-art-g-container { margin: 18px 0; }
 .whole-line-art-g-container h4 { font-weight: 700; }

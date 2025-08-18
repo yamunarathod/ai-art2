@@ -294,13 +294,15 @@ const DrawingApp = () => {
                 
                 <LineArtSelector onLineArtSelect={(img) => setLineArtImages((p) => [...p, { ...img, position: { x: 50, y: 50 }, size: { width: 180, height: 120 } }])} />
                 <div className="imageResize-container">
-                  <h3>Resize</h3>
+                  <h3>Adjust Shape Size</h3>
                   <div className="imageResize-con">
                     <input type="range" min="60" max="800" onChange={handleResizeImage} style={{ width: '100%' }} />
 
                   </div>
                 </div>
                 <h2 className="clasgg-h2">SELECT THEME</h2>
+                <div className="theme">
+
                 <div className="mainthemcont">
                   <div className="oggng">
                     {['Robot','Space','Drone','SuperCore'].map((item) => (
@@ -331,6 +333,7 @@ const DrawingApp = () => {
                       </div>
                     </div>
                   )}
+                </div>
                 </div>
 
                 <div className="whole-style-container">
