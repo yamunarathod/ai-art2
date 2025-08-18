@@ -1,5 +1,3 @@
-
-
 import { useState } from "react";
 
 const LineArtSelector = ({ onLineArtSelect }) => {
@@ -9,47 +7,40 @@ const LineArtSelector = ({ onLineArtSelect }) => {
       text: "Robot",
       subImages: [
         { src: "/dd/a1.svg", icon: "/d/a1.svg", text: "Mechanical robot" },
-        { src: "/dd/a2.svg", icon: "/d/a2.svg", text: "robot dog" },
-        { src: "/dd/a3.svg", icon: "/d/a3.svg", text: "robotic dog" },
+        { src: "/dd/a3.svg", icon: "/d/a3.svg", text: "robot dog" },
         { src: "/dd/a4.svg", icon: "/d/a4.svg", text: "robot cat" },
-        { src: "/dd/a5.svg", icon: "/d/a5.svg", text: "robot in Spaceship" },
-        { src: "/dd/a6.svg", icon: "/d/a6.svg", text: "robot construction" },
+        { src: "/dd/a5.svg", icon: "/d/a5.svg", text: "robot UFO" },
+
       ],
     },
     {
       src: "/a2.svg",
-      text: "House",
+      text: "Space",
       subImages: [
-        { src: "/h1.svg", icon: "/hh1.svg", text: "Villa" },
-        { src: "/h2.svg", icon: "/hh2.svg", text: "Mansion" },
-        { src: "/h3.svg", icon: "/hh3.svg", text: "Cottage" },
-        { src: "/h4.svg", icon: "/hh4.svg", text: "Skyscraper" },
-        { src: "/h5.svg", icon: "/hh5.svg", text: "Bungalow" },
-        { src: "/h6.svg", icon: "/hh6.svg", text: "Farmhouse" },
+        { src: "/h1.svg", icon: "/hh1.svg", text: "Rocket" },
+        { src: "/h2.svg", icon: "/hh2.svg", text: "Satellite" },
+        { src: "/h3.svg", icon: "/hh3.svg", text: "astronaut" },
+        { src: "/h4.svg", icon: "/hh4.svg", text: "UFO" },
       ],
     },
     {
       src: "/a3.png",
-      text: "Automobile",
+      text: "Drone",
       subImages: [
-        { src: "/dd/c1.svg", icon: "/d/c1.svg", text: "Car" },
-        { src: "/dd/c2.svg", icon: "/d/c2.svg", text: "Ship" },
-        { src: "/dd/c3.svg", icon: "/d/c3.svg", text: "Aeroplane" },
-        { src: "/dd/c4.svg", icon: "/d/c4.svg", text: "Bus" },
-        { src: "/dd/c5.svg", icon: "/d/c5.svg", text: "Truck" },
-        { src: "/dd/c6.svg", icon: "/d/c6.svg", text: "Tractor" },
+        { src: "/dd/c1.svg", icon: "/d/c1.svg", text: "Drone" },
+        { src: "/dd/c2.svg", icon: "/d/c2.svg", text: "Drone Delivery" },
+        { src: "/dd/c3.svg", icon: "/d/c3.svg", text: "Drone Bomber" },
+        { src: "/dd/c4.svg", icon: "/d/c4.svg", text: "Drone Control" },
       ],
     },
     {
       src: "/a4.png",
-      text: "Infrastructure",
+      text: "SuperCore",
       subImages: [
-        { src: "/highway.svg", icon: "/highway1.svg", text: "Highway" },
-        { src: "/metro.svg", icon: "/metro1.svg", text: "Metro" },
-        { src: "/crane.svg", icon: "/crane1.svg", text: "Crane" },
-        { src: "/bridge.svg", icon: "/bridge1.svg", text: "Bridge" },
-        { src: "/port.svg", icon: "/port1.svg", text: "Port" },
-        { src: "/airport.svg", icon: "/airport1.svg", text: "Airport" },
+        { src: "/dd/b1.svg", icon: "/d/b1.svg", text: "Computer" },
+        { src: "/dd/b2.svg", icon: "/d/b2.svg", text: "Chip" },
+        { src: "/dd/b3.svg", icon: "/d/b3.svg", text: "Cloud Computing" },
+        { src: "/dd/b5.svg", icon: "/d/b5.svg", text: "Brain+Chip" },
       ],
     },
   ];
@@ -70,15 +61,18 @@ const LineArtSelector = ({ onLineArtSelect }) => {
 
   return (
     <div className="whole-line-art-g-container">
-      <h4>SELECT SHAPE</h4>
-      <div className="main-line-art-selector">
+      <h4 className="selectShape">SELECT SHAPE</h4>
+
+      {/* Shape group */}
+      <div className="main-line-art-selector" role="tablist" aria-label="Shape categories">
         {lineArtDivs.map((lineArt, index) => (
           <div
             key={index}
-            onClick={() => {
-              setActiveIndex(index);
-              setSubImageIndex(0);
-            }}
+            role="tab"
+            aria-selected={activeIndex === index}
+            tabIndex={0}
+            onClick={() => { setActiveIndex(index); setSubImageIndex(0); }}
+            onKeyDown={(e) => { if (e.key === 'Enter') { setActiveIndex(index); setSubImageIndex(0); } }}
             className="line-art-boxes"
             style={{
               border: activeIndex === index ? "3px solid #FFFFFF" : "1px solid #fff",
@@ -91,54 +85,47 @@ const LineArtSelector = ({ onLineArtSelect }) => {
           </div>
         ))}
       </div>
+
+      {/* Sub images carousel */}
       <div className="sub-lineart-image-selector">
         {subImageIndex > 0 && (
           <button
             onClick={handlePrev}
+            aria-label="Previous"
             style={{
-              backgroundImage: 'url("/left.png")',
-              backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
-              border: 'none',
-              outline: 'none',
-              width: '20px',
-              height: '30px',
-              marginTop: '-28px', // Move the button up
-              backgroundColor: 'transparent',
+              backgroundImage: 'url("/left.png")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center', border: 'none', outline: 'none', width: 30, height: 30,
+              marginTop: -28, backgroundColor: 'transparent'
             }}
-          >
-            &lt;
-          </button>
+          />
         )}
+
         {lineArtDivs[activeIndex].subImages
           .slice(subImageIndex, subImageIndex + visibleSubImages)
-          .map((subImage, subIndex) => (
+          .map((subImage) => (
             <div key={subImage.src} className="main-sub-image-main-lineart">
-              <div onClick={() => onLineArtSelect(subImage)} draggable="true" className="linert-gg55op">
+              <div
+                onClick={() => onLineArtSelect(subImage)}
+                draggable
+                className="linert-gg55op"
+                title={subImage.text}
+              >
                 <img src={subImage.icon} alt={subImage.text} className="inside-image-line-art" />
               </div>
-              <p style={{ fontSize: "12px", textAlign: "center", color: "white" }}>{subImage.text}</p>
+              <p style={{ fontSize: 12, textAlign: "center", color: "white" }}>{subImage.text}</p>
             </div>
           ))}
+
         {subImageIndex + visibleSubImages < lineArtDivs[activeIndex].subImages.length && (
           <button
             onClick={handleNext}
+            aria-label="Next"
             style={{
-              backgroundImage: 'url("/right.png")',
-              backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
-              border: 'none',
-              width: '20px',
-              height: '30px',
-              marginTop: '-28px', // Move the button up
-              backgroundColor: 'transparent',
-              marginRight: '40px',
+              backgroundImage: 'url("/right.png")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center', border: 'none', width: 20, height: 30, marginTop: -28,
+              backgroundColor: 'transparent', marginRight: 40
             }}
-          >
-            &gt;
-          </button>
+          />
         )}
       </div>
     </div>
