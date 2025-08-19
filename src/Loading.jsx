@@ -29,5 +29,4 @@ const styles = {
   },
 };
 
-
 export default Loading;

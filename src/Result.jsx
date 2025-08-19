@@ -51,10 +51,10 @@ const Result = () => {
   }, [uploadedImageUrl, canvasDrawingUrl]);
 
   return (
-    <div className="ui-screen" >
+    <div className="ui-screen">
       <div className="content">
         <div className="image-area">
-        <div className="result-image">
+          <div className="result-image">
             {isImageLoading ? (
               <div className="loading-container">
                 <svg
@@ -74,7 +74,13 @@ const Result = () => {
                       calcMode="spline"
                     ></animate>
                   </circle>
-                  <circle transform="rotate(45 16 16)" cx="16" cy="3" r="0" fill="white">
+                  <circle
+                    transform="rotate(45 16 16)"
+                    cx="16"
+                    cy="3"
+                    r="0"
+                    fill="white"
+                  >
                     <animate
                       attributeName="r"
                       values="0;3;0;0"
@@ -85,7 +91,13 @@ const Result = () => {
                       calcMode="spline"
                     ></animate>
                   </circle>
-                  <circle transform="rotate(90 16 16)" cx="16" cy="3" r="0" fill="white">
+                  <circle
+                    transform="rotate(90 16 16)"
+                    cx="16"
+                    cy="3"
+                    r="0"
+                    fill="white"
+                  >
                     <animate
                       attributeName="r"
                       values="0;3;0;0"
@@ -96,7 +108,13 @@ const Result = () => {
                       calcMode="spline"
                     ></animate>
                   </circle>
-                  <circle transform="rotate(135 16 16)" cx="16" cy="3" r="0" fill="white">
+                  <circle
+                    transform="rotate(135 16 16)"
+                    cx="16"
+                    cy="3"
+                    r="0"
+                    fill="white"
+                  >
                     <animate
                       attributeName="r"
                       values="0;3;0;0"
@@ -107,7 +125,13 @@ const Result = () => {
                       calcMode="spline"
                     ></animate>
                   </circle>
-                  <circle transform="rotate(180 16 16)" cx="16" cy="3" r="0" fill="white">
+                  <circle
+                    transform="rotate(180 16 16)"
+                    cx="16"
+                    cy="3"
+                    r="0"
+                    fill="white"
+                  >
                     <animate
                       attributeName="r"
                       values="0;3;0;0"
@@ -118,7 +142,13 @@ const Result = () => {
                       calcMode="spline"
                     ></animate>
                   </circle>
-                  <circle transform="rotate(225 16 16)" cx="16" cy="3" r="0" fill="white">
+                  <circle
+                    transform="rotate(225 16 16)"
+                    cx="16"
+                    cy="3"
+                    r="0"
+                    fill="white"
+                  >
                     <animate
                       attributeName="r"
                       values="0;3;0;0"
@@ -129,7 +159,13 @@ const Result = () => {
                       calcMode="spline"
                     ></animate>
                   </circle>
-                  <circle transform="rotate(270 16 16)" cx="16" cy="3" r="0" fill="white">
+                  <circle
+                    transform="rotate(270 16 16)"
+                    cx="16"
+                    cy="3"
+                    r="0"
+                    fill="white"
+                  >
                     <animate
                       attributeName="r"
                       values="0;3;0;0"
@@ -140,7 +176,13 @@ const Result = () => {
                       calcMode="spline"
                     ></animate>
                   </circle>
-                  <circle transform="rotate(315 16 16)" cx="16" cy="3" r="0" fill="white">
+                  <circle
+                    transform="rotate(315 16 16)"
+                    cx="16"
+                    cy="3"
+                    r="0"
+                    fill="white"
+                  >
                     <animate
                       attributeName="r"
                       values="0;3;0;0"
@@ -153,7 +195,6 @@ const Result = () => {
                   </circle>
                 </svg>
               </div>
-       
             ) : (
               <img src={uploadedImageUrl} alt="Futuristic cityscape" />
             )}
@@ -166,7 +207,7 @@ const Result = () => {
           <div className="qr-code">
             <QRCodeCanvas value={uploadedImageUrl} size={256} />
           </div>
-          <button className="redraw-button" onClick={handleRedraw} >
+          <button className="redraw-button" onClick={handleRedraw}>
             Redraw
           </button>
         </div>

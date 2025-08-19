@@ -10,7 +10,6 @@ const LineArtSelector = ({ onLineArtSelect }) => {
         { src: "/dd/a3.svg", icon: "/d/a3.svg", text: "robot dog" },
         { src: "/dd/a4.svg", icon: "/d/a4.svg", text: "robot cat" },
         { src: "/dd/a5.svg", icon: "/d/a5.svg", text: "robot UFO" },
-
       ],
     },
     {
@@ -45,13 +44,17 @@ const LineArtSelector = ({ onLineArtSelect }) => {
     },
   ];
 
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0); // Start with Robot (index 0) as default
   const [subImageIndex, setSubImageIndex] = useState(0);
+  const [selectedShapes, setSelectedShapes] = useState(new Set());
   const visibleSubImages = 4;
 
   const handleNext = () => {
     setSubImageIndex((prev) =>
-      Math.min(prev + visibleSubImages, lineArtDivs[activeIndex].subImages.length - visibleSubImages)
+      Math.min(
+        prev + visibleSubImages,
+        lineArtDivs[activeIndex].subImages.length - visibleSubImages
+      )
     );
   };
 
@@ -64,25 +67,36 @@ const LineArtSelector = ({ onLineArtSelect }) => {
       <h4 className="selectShape">SELECT SHAPE</h4>
 
       {/* Shape group */}
-      <div className="main-line-art-selector" role="tablist" aria-label="Shape categories">
-  {lineArtDivs.map((lineArt, index) => {
-    const isActive = activeIndex === index;
-    return (
       <div
-        key={index}
-        role="tab"
-        aria-selected={isActive}
-        tabIndex={0}
-        onClick={() => { setActiveIndex(index); setSubImageIndex(0); }}
-        onKeyDown={(e) => { if (e.key === 'Enter') { setActiveIndex(index); setSubImageIndex(0); } }}
-        className={`line-art-boxes ${isActive ? 'is-active' : ''}`}
+        className="main-line-art-selector"
+        role="tablist"
+        aria-label="Shape categories"
       >
-        <p>{lineArt.text}</p>
+        {lineArtDivs.map((lineArt, index) => {
+          const isActive = activeIndex === index;
+          return (
+            <div
+              key={index}
+              role="tab"
+              aria-selected={isActive}
+              tabIndex={0}
+              onClick={() => {
+                setActiveIndex(index);
+                setSubImageIndex(0);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  setActiveIndex(index);
+                  setSubImageIndex(0);
+                }
+              }}
+              className={`line-art-boxes ${isActive ? "is-active" : ""}`}
+            >
+              <p>{lineArt.text}</p>
+            </div>
+          );
+        })}
       </div>
-    );
-  })}
-</div>
-
 
       {/* Sub images carousel */}
       <div className="sub-lineart-image-selector">
@@ -91,37 +105,71 @@ const LineArtSelector = ({ onLineArtSelect }) => {
             onClick={handlePrev}
             aria-label="Previous"
             style={{
-              backgroundImage: 'url("/left.png")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center', border: 'none', outline: 'none', width: 30, height: 30,
-              marginTop: -28, backgroundColor: 'transparent'
+              backgroundImage: 'url("/left.png")',
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+              border: "none",
+              outline: "none",
+              width: 30,
+              height: 30,
+              marginTop: -28,
+              backgroundColor: "transparent",
             }}
           />
         )}
 
         {lineArtDivs[activeIndex].subImages
           .slice(subImageIndex, subImageIndex + visibleSubImages)
-          .map((subImage) => (
-            <div key={subImage.src} className="main-sub-image-main-lineart">
-              <div
-                onClick={() => onLineArtSelect(subImage)}
-                draggable
-                className="linert-gg55op"
-                title={subImage.text}
-              >
-                <img src={subImage.icon} alt={subImage.text} className="inside-image-line-art" />
-              </div>
-              
-            </div>
-          ))}
+          .map((subImage) => {
+            const shapeId = `${activeIndex}-${subImage.src}`;
+            const isSelected = selectedShapes.has(shapeId);
 
-        {subImageIndex + visibleSubImages < lineArtDivs[activeIndex].subImages.length && (
+            return (
+              <div key={subImage.src} className="main-sub-image-main-lineart">
+                <div
+                  onClick={() => {
+                    onLineArtSelect(subImage);
+                    setSelectedShapes((prev) => {
+                      const newSet = new Set(prev);
+                      if (newSet.has(shapeId)) {
+                        newSet.delete(shapeId);
+                      } else {
+                        newSet.add(shapeId);
+                      }
+                      return newSet;
+                    });
+                  }}
+                  draggable
+                  className={`linert-gg55op ${isSelected ? "is-active" : ""}`}
+                  title={subImage.text}
+                >
+                  <img
+                    src={subImage.icon}
+                    alt={subImage.text}
+                    className="inside-image-line-art"
+                  />
+                </div>
+              </div>
+            );
+          })}
+
+        {subImageIndex + visibleSubImages <
+          lineArtDivs[activeIndex].subImages.length && (
           <button
             onClick={handleNext}
             aria-label="Next"
             style={{
-              backgroundImage: 'url("/right.png")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center', border: 'none', width: 20, height: 30, marginTop: -28,
-              backgroundColor: 'transparent', marginRight: 40
+              backgroundImage: 'url("/right.png")',
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+              border: "none",
+              width: 20,
+              height: 30,
+              marginTop: -28,
+              backgroundColor: "transparent",
+              marginRight: 40,
             }}
           />
         )}

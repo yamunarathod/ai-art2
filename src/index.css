@@ -1,21 +1,29 @@
 :root {
-  --app-bg: #233F80;           /* page bg under hero */
-  --frame-blue: #125FF3; 
-  --col: #2244A2;    /* canvas frame */
-  --brand-indigo: #0F4ABA;      /* accents */
-  --panel-purple: #322554;      /* dark panel */
-  --panel-lilac: #504C9C;       /* active chip */
+  --app-bg: #233f80; /* page bg under hero */
+  --frame-blue: #125ff3;
+  --col: #2244a2; /* canvas frame */
+  --brand-indigo: #0f4aba; /* accents */
+  --panel-purple: #322554; /* dark panel */
+  --panel-lilac: #504c9c; /* active chip */
   --text: #ffffff;
-  --text-dark: #0E0E0E;
-  --chip-bg: #FBFBFB;
+  --text-dark: #0e0e0e;
+  --chip-bg: #fbfbfb;
   --cut: 20px;
-  --chip-cut: 12px; 
-  --chip-bg-active: #EEEEEE;
+  --chip-cut: 12px;
+  --chip-bg-active: #eeeeee;
 }
 
 /* Reset */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html, body, #root { height: 100%; }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html,
+body,
+#root {
+  height: 100%;
+}
 body {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   background: var(--app-bg) url("/bg22.png") center / cover no-repeat fixed;
@@ -24,7 +32,15 @@ body {
 }
 
 /* Kill default heading/paragraph margins to avoid trailing gaps */
-h1, h2, h3, h4, h5, h6, p { margin: 0; }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
 
 /* Container split like Figma: Left stage + Right controls */
 .mainContainer {
@@ -33,8 +49,8 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
   gap: 24px;
   height: 100vh;
   width: 100vw;
-  padding: 46px 32px 0 32px;         /* removed bottom padding */
-  margin-bottom: 0 !important;       /* ensure no bottom margin */
+  padding: 46px 32px 0 32px; /* removed bottom padding */
+  margin-bottom: 0 !important; /* ensure no bottom margin */
   align-content: start;
 }
 
@@ -67,7 +83,13 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
   background: #fff;
   border: 5px solid var(--frame-blue);
   padding: 10px; /* inner frame padding */
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 108px), calc(100% - 108px) 100%, 0 100%);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 108px),
+    calc(100% - 108px) 100%,
+    0 100%
+  );
 }
 
 /* Add diagonal border highlight */
@@ -84,30 +106,45 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
 }
 
 /* Ensure the two canvases perfectly overlap in the frame */
-.canvasgg, .canvasff {
+.canvasgg,
+.canvasff {
   position: absolute;
   inset: 10px; /* sit inside the padded frame */
   width: calc(100% - 20px);
   height: calc(100% - 20px);
   background: transparent;
   border-radius: 0px;
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 100px), calc(100% - 100px) 100%, 0 100%);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 100px),
+    calc(100% - 100px) 100%,
+    0 100%
+  );
 }
 
 /* Underlay image canvas */
-.canvasgg { z-index: 1; }
+.canvasgg {
+  z-index: 1;
+}
 /* Top drawing canvas */
-.canvasff { z-index: 2; }
+.canvasff {
+  z-index: 2;
+}
 
 /* Toolbar under stage */
-.downContainer { display: grid; gap: 16px; margin-top: 9%;}
+.downContainer {
+  display: grid;
+  gap: 16px;
+  margin-top: 9%;
+}
 
 .brushRest input[type="range"] {
   -webkit-appearance: none;
   width: 100%;
   height: 28px; /* increased thickness */
   background: #fff;
-  border-radius: 0; 
+  border-radius: 0;
   outline: none;
 }
 
@@ -127,7 +164,7 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
 .brushRest input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 36px;  /* bigger knob */
+  width: 36px; /* bigger knob */
   height: 36px;
   background: #3a6df0;
   border: none;
@@ -144,7 +181,6 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
   cursor: pointer;
 }
 
-
 .bothGContainer {
   display: grid;
   grid-template-columns: 1fr 1fr; /* equal width */
@@ -153,59 +189,55 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
 }
 
 .brushButton {
-  height: 70px; /* increased height */
-  padding: 0 22px; /* more breathing space */
-  border-radius: 8px;
+  width: 524px;
+  height: 64px;
+  padding: 0 22px;
   font-size: 20px;
   font-weight: 700;
+  position: relative;
+  z-index: 10;
 
   display: flex;
-  align-items: center;         /* vertical center */
-  justify-content: center;     /* text+icon center horizontally */
+  align-items: center;
+  justify-content: center;
   gap: 12px;
 
   cursor: pointer;
   transition: all 0.2s ease;
-
-  /* inactive */
-  border: 2px solid var(--frame-blue);
-  background: #fff;
-  color: var(--col);
-}
-
-.brushButton.active {
-  background: var(--col);
-  color: #fff;
-  border-color: var(--col);
-
+  border: none;
+  background-color: transparent;
 }
 
 .brushButton .btnIcon {
   font-size: 26px; /* bigger icon */
 }
+/* Brush button with PNG background */
 .brushButton.brush {
-  clip-path: polygon(
-    0 0,        /* top-left */
-    100% 0,     /* top-right */
-    100% 100%,  /* bottom-right */
-    20px 100%,  /* bottom-left cut start */
-    0 calc(100% - 20px) /* bottom-left cut diagonal */
-  );
+  background-image: url("/brush-btn-card.png");
+  background-size: 524px 64px;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: #fff; /* White text for Brush */
 }
 
-/* Eraser: cut bottom-right */
+.brushButton.brush.active {
+  opacity: 0.9;
+  box-shadow: 0 0 16px rgba(34, 68, 162, 0.6);
+}
+
+/* Eraser button with PNG background */
 .brushButton.eraser {
-  clip-path: polygon(
-    0 0,              /* top-left */
-    100% 0,           /* top-right */
-    100% calc(100% - 20px), /* bottom-right cut diagonal */
-    calc(100% - 20px) 100%, /* bottom-right cut start */
-    0 100%            /* bottom-left */
-  );
+  background-image: url("/eraser-btn-card.png");
+  background-size: 524px 64px;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: #2244a2; /* #2244A2 text for Eraser */
 }
 
-
-
+.brushButton.eraser.active {
+  opacity: 0.9;
+  box-shadow: 0 0 16px rgba(34, 68, 162, 0.6);
+}
 
 /* Right panel */
 .mainRight {
@@ -218,13 +250,24 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
   margin-left: -15%;
 }
 
-.clasgg-h2 { color: #fff; font-weight: 700; font-size: 14px; letter-spacing: .2px; margin: 8px 0 0; }
+.clasgg-h2 {
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+  margin: 0 0 16px 0; /* Standard title to content spacing */
+}
 
 .imageResize-con {
-padding-top: 20px; padding-bottom: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
+.imageResize-container {
+  margin: 0 0 24px 0; /* Standard section spacing */
+}
+
 .imageResize-container h3 {
-  margin: 0 0 10px 0;
+  margin: 0 0 16px 0; /* Standard title to content spacing */
   font-size: 16px;
   font-weight: 700;
   color: #fff;
@@ -233,50 +276,50 @@ padding-top: 20px; padding-bottom: 20px;
 .imageResize-con {
   --cut: 0; /* (kept for consistency if you later add notches) */
 
-  background: rgba(255,255,255,0.06);   /* less opacity background */
-  border: 2px solid var(--col);         /* brand border */
-  border-radius: 0;                     /* no rounded corners */
+  background: rgba(255, 255, 255, 0.06); /* less opacity background */
+  border: 2px solid var(--col); /* brand border */
+  border-radius: 0; /* no rounded corners */
   padding: 10px 12px;
 }
 
 /* ===== Slider ===== */
-.imageResize-con input[type="range"]{
+.imageResize-con input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  height: 56px;               /* >= thumb size to avoid clipping */
-  background: transparent;    /* panel shows through */
+  height: 56px; /* >= thumb size to avoid clipping */
+  background: transparent; /* panel shows through */
   border-radius: 0;
   outline: none;
   cursor: pointer;
 }
 
 /* Track */
-.imageResize-con input[type="range"]::-webkit-slider-runnable-track{
-  height: 12px;               /* track thickness */
-  background: #ffffff;        /* white track */
-  border-radius: 0;           /* flat edges */
+.imageResize-con input[type="range"]::-webkit-slider-runnable-track {
+  height: 12px; /* track thickness */
+  background: #ffffff; /* white track */
+  border-radius: 0; /* flat edges */
 }
-.imageResize-con input[type="range"]::-moz-range-track{
+.imageResize-con input[type="range"]::-moz-range-track {
   height: 12px;
   background: #ffffff;
   border-radius: 0;
 }
 
 /* Big knob (thumb) */
-.imageResize-con input[type="range"]::-webkit-slider-thumb{
+.imageResize-con input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 24px;                /* big button */
+  width: 24px; /* big button */
   height: 34px;
-  background: #3a6df0;        /* knob color (change if needed) */
-  border: 2px solid #2450d6;  /* subtle edge like ref */
-  border-radius: 4px;         /* square-ish; set 0 for perfect square */
+  background: #3a6df0; /* knob color (change if needed) */
+  border: 2px solid #2450d6; /* subtle edge like ref */
+  border-radius: 4px; /* square-ish; set 0 for perfect square */
   position: relative;
   z-index: 2;
   transform: translateY(-11px); /* lift so it “sits on top” of track */
 }
-.imageResize-con input[type="range"]::-moz-range-thumb{
+.imageResize-con input[type="range"]::-moz-range-thumb {
   width: 34px;
   height: 34px;
   background: #3a6df0;
@@ -289,20 +332,19 @@ padding-top: 20px; padding-bottom: 20px;
 /* Focus polish (optional) */
 .imageResize-con input[type="range"]:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(255,255,255,0.15);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.15);
 }
 
 /* Theme chips row */
 .theme {
-  padding-top: 20px; padding-bottom: 20px;
+  margin-bottom: 24px; /* Standard section spacing */
 }
-
 
 .oggng {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
-  margin-bottom: 3%;
+  gap: 10px;
+  margin-bottom: 16px; /* Standard spacing before subprompts */
 }
 
 .selecttheme-box {
@@ -315,88 +357,80 @@ padding-top: 20px; padding-bottom: 20px;
   color: #fff;
   cursor: pointer;
   user-select: none;
-  border-radius: 0; /* no rounded corners */
+  border: none;
+  background-color: transparent;
+  transition: all 0.2s ease;
 
-  /* Inactive: translucent bg + white border */
-  background: rgba(255,255,255,0.08);
-  clip-path: polygon(
-    0 0,
-    100% 0,
-    100% 100%,
-    14px 100%,
-    0 calc(100% - 14px)
-  );
-}
-
-/* Border with pseudo-element so it follows the clipped shape */
-.selecttheme-box::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  clip-path: inherit;
-  border: 1px solid #fff;
-  pointer-events: none;
+  /* Use same PNG as SELECT SHAPE */
+  background-image: url("/select-shape-inactive-card.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 /* Hover on inactive */
-.selecttheme-box:hover {
-  background: rgba(255,255,255,0.12);
+.selecttheme-box:hover:not(.is-active) {
+  opacity: 0.85;
 }
 
 /* Active */
 .selecttheme-box.is-active {
-  background: #fff;
-  color: var(--col);
-  box-shadow: 0 0 12px rgba(255,255,255,0.35);
+  background-image: url("/select-shape-active-card.png");
+  color: #2244a2;
 }
-.selecttheme-box.is-active::before {
-  border: 3px solid #fff; /* thicker border when active */
-}
-
 
 /* Subprompt list */
 .sub-prompts-oopp {
-  background: var(--chip-bg);
-  color: var(--brand-indigo);
-  border: 1px solid transparent;
+  position: relative;
+  color: #fff;
   padding: 10px 12px;
   font-size: 13px;
   font-weight: 600;
-  margin-bottom: 10px;
+  margin-bottom: 8px; /* Consistent spacing between theme items */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  background-color: transparent;
 
-  /* cuts on bottom-left & bottom-right */
-  -webkit-clip-path: polygon(
-    0 0,
-    100% 0,
-    100% calc(100% - var(--chip-cut)),
-    calc(100% - var(--chip-cut)) 100%,
-    var(--chip-cut) 100%,
-    0 calc(100% - var(--chip-cut))
-  );
-  clip-path: polygon(
-    0 0,
-    100% 0,
-    100% calc(100% - var(--chip-cut)),
-    calc(100% - var(--chip-cut)) 100%,
-    var(--chip-cut) 100%,
-    0 calc(100% - var(--chip-cut))
-  );
+  /* Use theme item inactive PNG */
+  background-image: url("/theme-item-inactive-card.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Hover on inactive subprompts */
+.sub-prompts-oopp:hover:not(.is-active) {
+  opacity: 0.85;
+}
+
+/* Active subprompt styling */
+.sub-prompts-oopp.is-active {
+  background-image: url("/theme-item-active-card.png");
+  color: #2244a2;
 }
 
 /* Style buttons grid */
-.whole-style-container { width: 100%; }
-.whole-style-container h2 { font-size: 14px; font-weight: 700; margin: 10px 0 8px; }
+.whole-style-container {
+  width: 100%;
+  margin-bottom: 24px; /* Standard section spacing */
+}
+.whole-style-container h2 {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 0 16px 0; /* Standard title to content spacing */
+  color: #fff;
+}
 .style-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* 2x2 grid */
   gap: 10px;
-  padding-top: 20px;
-  padding-bottom: 20px;
 }
 
 .style-box {
   position: relative;
-  height: 48px;
+  width: 212px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -404,52 +438,34 @@ padding-top: 20px; padding-bottom: 20px;
   font-weight: 600;
   cursor: pointer;
   user-select: none;
-  border-radius: 0; /* no rounded corners */
-
-  /* Inactive: faint bg + white border */
-  background: rgba(255,255,255,0.08);
+  border: none;
+  background-color: transparent;
   color: #fff;
+  transition: all 0.2s ease;
 
-  /* bottom-left cut */
-  clip-path: polygon(
-    0 0,
-    100% 0,
-    100% 100%,
-    14px 100%,
-    0 calc(100% - 14px)
-  );
-}
-
-/* Fake border so it follows clip-path */
-.style-box::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  clip-path: inherit;
-  border: 1px solid #fff;
-  pointer-events: none;
+  /* Use PNG backgrounds with specific size */
+  background-image: url("/select-shape-inactive-card.png");
+  background-size: 212px 50px;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 /* Hover on inactive */
-.style-box:hover {
-  background: rgba(255,255,255,0.12);
+.style-box:hover:not(.is-active) {
+  opacity: 0.85;
 }
 
 /* Active */
 .style-box.is-active {
-  background: #fff;
-  color: var(--col);
-  box-shadow: 0 0 12px rgba(255,255,255,0.35);
-}
-.style-box.is-active::before {
-  border: 3px solid #fff;
+  background-image: url("/select-shape-active-card.png");
+  color: #2244a2;
 }
 
 .submit {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
-  margin-top: 2%;
+  margin-top: 24px; /* Standard spacing from previous section */
 }
 
 .buttonGG-rf,
@@ -458,6 +474,8 @@ padding-top: 20px; padding-bottom: 20px;
   padding: 0 22px;
   font-size: 18px;
   font-weight: 700;
+  position: relative;
+  z-index: 10; /* ensure content is above pseudo-elements */
 
   display: flex;
   align-items: center;
@@ -471,100 +489,82 @@ padding-top: 20px; padding-bottom: 20px;
   color: var(--frame-blue);
 }
 
-/* Hover/Active glow */
-.buttonGG-rf:hover,
-.resetButton:hover {
-  background: var(--frame-blue);
-  color: #fff;
-  box-shadow: 0 0 14px rgba(18, 95, 243, 0.55);
-}
+/* Remove hover effects for Submit and Reset buttons */
 
-/* Submit: cut bottom-left */
+/* Submit button with PNG background */
 .submitBtn {
-  clip-path: polygon(
-    0 0,
-    100% 0,
-    100% 100%,
-    20px 100%,
-    0 calc(100% - 20px)
-  );
+  background-image: url('/submit-btn-card.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  border: none;
+  color: #fff !important;
 }
 
-/* Reset: cut bottom-right */
+/* Reset button with PNG background */
 .resetBtn {
-  clip-path: polygon(
-    0 0,
-    100% 0,
-    100% calc(100% - 20px),
-    calc(100% - 20px) 100%,
-    0 100%
-  );
+  background-image: url('/reset-btn-card.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  border: none;
+  color: #2244A2 !important;
 }
 
 /* Line art selector tweaks */
-.whole-line-art-g-container { margin: 18px 0; }
-.whole-line-art-g-container h4 { font-weight: 700; }
+.whole-line-art-g-container {
+  margin: 0 0 24px 0; /* Standard bottom margin */
+}
+.whole-line-art-g-container h4 {
+  font-weight: 700;
+  margin: 0 0 16px 0; /* Standard title to content spacing */
+}
 .main-line-art-selector {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
-  padding-top: 15px;
-  padding-bottom: 15px;
+  margin-bottom: 16px; /* Space before shape cards */
 }
 
 .line-art-boxes {
-  position: relative;  /* allow ::before overlay */
+  position: relative;
   height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: none;                /* remove default border */
-  background: rgba(255,255,255,0.08);  /* faint bg for inactive */
   color: #ffffff;
   font-weight: 600;
   user-select: none;
   cursor: pointer;
-  transition: all .2s ease;
-  border-radius: 0;
+  transition: all 0.2s ease;
+  border: none;
+  background-color: transparent;
 
-  /* Cut bottom-left corner */
-  clip-path: polygon(
-    0 0,
-    100% 0,
-    100% 100%,
-    20px 100%,
-    0 calc(100% - 20px)
-  );
-}
-
-/* Fake border so it follows the clip-path */
-.line-art-boxes::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  clip-path: inherit;
-  border: 1px solid #fff;
-  pointer-events: none;   /* don't block clicks */
+  /* Use PNG as background */
+  background-image: url("/select-shape-inactive-card.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 /* Hover/focus on inactive */
-.line-art-boxes:hover,
-.line-art-boxes:focus-visible {
-  background: rgba(255,255,255,0.12);
+.line-art-boxes:hover:not(.is-active),
+.line-art-boxes:focus-visible:not(.is-active) {
+  opacity: 0.85;
   outline: none;
 }
 
 /* Active tab */
 .line-art-boxes.is-active {
-  background: #ffffff;
-  color: var(--col);
-  box-shadow: 0 0 12px rgba(255,255,255,0.35);
-}
-.line-art-boxes.is-active::before {
-  border: 3px solid #fff; /* thicker stroke for active */
+  background-image: url("/select-shape-active-card.png");
+  color: #2244a2;
 }
 
-.line-art-boxes p { margin: 0; }
+.line-art-boxes p {
+  margin: 0;
+}
 
 /* ========== Line Art: Sub-image scroller ========== */
 .sub-lineart-image-selector {
@@ -572,6 +572,7 @@ padding-top: 20px; padding-bottom: 20px;
   grid-auto-flow: column;
   gap: 10px;
   align-items: center;
+  margin-top: 16px; /* Space from category boxes */
 }
 
 /* Optional: previous/next buttons (your inline styles can stay if you prefer) */
@@ -586,57 +587,34 @@ padding-top: 20px; padding-bottom: 20px;
 
 /* ========== Tile wrapper around each sub-image ========== */
 .linert-gg55op {
-  /* Adjust the notch here */
-  --cut: 16px;
-
   position: relative;
   width: 110px;
   padding: 10px;
   display: grid;
   place-items: center;
-
   cursor: grab;
-  border-radius: 0;                          /* no rounded corners */
-  border: none;                              /* border drawn via ::before */
-  background: rgba(255, 255, 255, 0.10);     /* low-opacity inactive bg */
+  border: none;
+  background-color: transparent;
 
-  /* Clip TOP-RIGHT + BOTTOM-LEFT corners at ~45° */
-  clip-path: polygon(
-    0 0,
-    calc(100% - var(--cut)) 0,
-    100% var(--cut),
-    100% 100%,
-    var(--cut) 100%,
-    0 calc(100% - var(--cut))
-  );
+  /* Use PNG as background */
+  background-image: url("/shape-card.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
 
-  transition: background .18s ease, box-shadow .18s ease, transform .08s ease;
-}
-
-/* White border that follows the clipped shape (also shows on the diagonal cuts) */
-.linert-gg55op::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  clip-path: inherit;
-  pointer-events: none;
-  border: 1px solid #fff;                    /* inactive stroke */
+  transition: transform 0.08s ease, opacity 0.18s ease;
 }
 
 /* Hover/Focus */
 .linert-gg55op:hover,
 .linert-gg55op:focus-visible {
-  background: rgba(255, 255, 255, 0.16);
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.20);
+  opacity: 0.9;
   outline: none;
 }
 
-/* Active/Selected state (optional: add .is-active from JS when chosen) */
+/* Active/Selected state - optional visual feedback */
 .linert-gg55op.is-active {
-  background: rgba(255, 255, 255, 0.22);
-}
-.linert-gg55op.is-active::before {
-  border-width: 3px;                         /* thicker white stroke */
+  opacity: 0.85;
 }
 
 /* Pressed feel while dragging */
@@ -660,19 +638,33 @@ padding-top: 20px; padding-bottom: 20px;
   justify-items: center;
 }
 
-
 /* Range */
 
 /* Mobile notice */
-.mobileView { display: grid; place-items: center; height: 100vh; width: 100vw; background: #fff; color: #333; padding: 20px; text-align: center; }
+.mobileView {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  width: 100vw;
+  background: #fff;
+  color: #333;
+  padding: 20px;
+  text-align: center;
+}
 
 /* Responsive rules that keep Figma proportions on common screens */
 @media (min-width: 1440px) {
-  .canvasContainer { min-height: 540px; }
+  .canvasContainer {
+    min-height: 540px;
+  }
 }
 @media (min-width: 1660px) {
-  .canvasContainer { min-height: 620px; }
+  .canvasContainer {
+    min-height: 620px;
+  }
 }
 @media (min-width: 1920px) {
-  .canvasContainer { min-height: 700px; }
+  .canvasContainer {
+    min-height: 700px;
+  }
 }

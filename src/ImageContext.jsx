@@ -23,7 +23,6 @@
 //   );
 // };
 
-
 // // ImageContext.jsx
 // import React, { createContext, useState } from "react";
 
@@ -47,7 +46,6 @@
 //     </ImageContext.Provider>
 //   );
 // };
-
 
 // ImageContext.jsx
 import React, { createContext, useState, useEffect } from "react";
