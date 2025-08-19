@@ -1,12 +1,15 @@
 :root {
   --app-bg: #233F80;           /* page bg under hero */
-  --frame-blue: #125FF3;        /* canvas frame */
+  --frame-blue: #125FF3; 
+  --col: #2244A2;    /* canvas frame */
   --brand-indigo: #0F4ABA;      /* accents */
   --panel-purple: #322554;      /* dark panel */
   --panel-lilac: #504C9C;       /* active chip */
   --text: #ffffff;
   --text-dark: #0E0E0E;
   --chip-bg: #FBFBFB;
+  --cut: 20px;
+  --chip-cut: 12px; 
   --chip-bg-active: #EEEEEE;
 }
 
@@ -97,33 +100,112 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
 .canvasff { z-index: 2; }
 
 /* Toolbar under stage */
-.downContainer { display: grid; gap: 16px; margin-top: 8%;}
-.brushRest {
-  width: 100%;
-  border: 1px solid #ffffff66;
-  border-radius: 12px;
-  padding: 14px 18px;
-  background: #ffffff10;
-  backdrop-filter: blur(2px);
-}
-.bothGContainer { display: grid; grid-auto-flow: column; gap: 14px; margin-top: 2%; }
+.downContainer { display: grid; gap: 16px; margin-top: 9%;}
 
-.brushButton, .resetButton {
-  height: 54px;
-  border-radius: 10px;
-  font-size: 18px;
-  font-weight: 700;
+.brushRest input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 28px; /* increased thickness */
+  background: #fff;
+  border-radius: 0; 
+  outline: none;
 }
+
+/* Track styling */
+.brushRest input[type="range"]::-webkit-slider-runnable-track {
+  height: 24px; /* thicker track */
+  background: #ffffff;
+  border-radius: 0;
+}
+.brushRest input[type="range"]::-moz-range-track {
+  height: 24px; /* thicker track for Firefox */
+  background: #ffffff;
+  border-radius: 0;
+}
+
+/* Thumb styling */
+.brushRest input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 36px;  /* bigger knob */
+  height: 36px;
+  background: #3a6df0;
+  border: none;
+  border-radius: 8px; /* square with slight rounding, change to 50% for circle */
+  cursor: pointer;
+  margin-top: -6px; /* centers thumb vertically on thicker track */
+}
+.brushRest input[type="range"]::-moz-range-thumb {
+  width: 36px;
+  height: 36px;
+  background: #3a6df0;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+
+.bothGContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* equal width */
+  gap: 14px;
+  margin-top: 3%;
+}
+
 .brushButton {
-  border: 1px solid #fff;
-  color: var(--panel-purple);
-  background: #fff; padding-top: 30px; padding-bottom: 40px;
+  height: 70px; /* increased height */
+  padding: 0 22px; /* more breathing space */
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: 700;
+
+  display: flex;
+  align-items: center;         /* vertical center */
+  justify-content: center;     /* text+icon center horizontally */
+  gap: 12px;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  /* inactive */
+  border: 2px solid var(--frame-blue);
+  background: #fff;
+  color: var(--col);
 }
-.resetButton {
-  border: 1px solid #fff;
+
+.brushButton.active {
+  background: var(--col);
   color: #fff;
-  background: var(--panel-purple); padding: 30px;padding-bottom: 40px;
+  border-color: var(--col);
+
 }
+
+.brushButton .btnIcon {
+  font-size: 26px; /* bigger icon */
+}
+.brushButton.brush {
+  clip-path: polygon(
+    0 0,        /* top-left */
+    100% 0,     /* top-right */
+    100% 100%,  /* bottom-right */
+    20px 100%,  /* bottom-left cut start */
+    0 calc(100% - 20px) /* bottom-left cut diagonal */
+  );
+}
+
+/* Eraser: cut bottom-right */
+.brushButton.eraser {
+  clip-path: polygon(
+    0 0,              /* top-left */
+    100% 0,           /* top-right */
+    100% calc(100% - 20px), /* bottom-right cut diagonal */
+    calc(100% - 20px) 100%, /* bottom-right cut start */
+    0 100%            /* bottom-left */
+  );
+}
+
+
+
 
 /* Right panel */
 .mainRight {
@@ -141,52 +223,445 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
 .imageResize-con {
 padding-top: 20px; padding-bottom: 20px;
 }
+.imageResize-container h3 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.imageResize-con {
+  --cut: 0; /* (kept for consistency if you later add notches) */
+
+  background: rgba(255,255,255,0.06);   /* less opacity background */
+  border: 2px solid var(--col);         /* brand border */
+  border-radius: 0;                     /* no rounded corners */
+  padding: 10px 12px;
+}
+
+/* ===== Slider ===== */
+.imageResize-con input[type="range"]{
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 56px;               /* >= thumb size to avoid clipping */
+  background: transparent;    /* panel shows through */
+  border-radius: 0;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Track */
+.imageResize-con input[type="range"]::-webkit-slider-runnable-track{
+  height: 12px;               /* track thickness */
+  background: #ffffff;        /* white track */
+  border-radius: 0;           /* flat edges */
+}
+.imageResize-con input[type="range"]::-moz-range-track{
+  height: 12px;
+  background: #ffffff;
+  border-radius: 0;
+}
+
+/* Big knob (thumb) */
+.imageResize-con input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;                /* big button */
+  height: 34px;
+  background: #3a6df0;        /* knob color (change if needed) */
+  border: 2px solid #2450d6;  /* subtle edge like ref */
+  border-radius: 4px;         /* square-ish; set 0 for perfect square */
+  position: relative;
+  z-index: 2;
+  transform: translateY(-11px); /* lift so it “sits on top” of track */
+}
+.imageResize-con input[type="range"]::-moz-range-thumb{
+  width: 34px;
+  height: 34px;
+  background: #3a6df0;
+  border: 2px solid #2450d6;
+  border-radius: 4px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Focus polish (optional) */
+.imageResize-con input[type="range"]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.15);
+}
+
 /* Theme chips row */
 .theme {
   padding-top: 20px; padding-bottom: 20px;
 }
 
-.mainthemcont { background: #fff; border-radius: 12px; padding: 8px; color: var(--text-dark); }
-.oggng { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-.selecttheme-cc, .selecttheme-bb, .selecttheme-aa, .selecttheme-dd {
-  height: 42px; display: grid; place-items: center; border-radius: 8px; cursor: pointer; border: 1px solid #ddd;
+
+.oggng {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 3%;
 }
 
+.selecttheme-box {
+  position: relative;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 0; /* no rounded corners */
+
+  /* Inactive: translucent bg + white border */
+  background: rgba(255,255,255,0.08);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    14px 100%,
+    0 calc(100% - 14px)
+  );
+}
+
+/* Border with pseudo-element so it follows the clipped shape */
+.selecttheme-box::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: inherit;
+  border: 1px solid #fff;
+  pointer-events: none;
+}
+
+/* Hover on inactive */
+.selecttheme-box:hover {
+  background: rgba(255,255,255,0.12);
+}
+
+/* Active */
+.selecttheme-box.is-active {
+  background: #fff;
+  color: var(--col);
+  box-shadow: 0 0 12px rgba(255,255,255,0.35);
+}
+.selecttheme-box.is-active::before {
+  border: 3px solid #fff; /* thicker border when active */
+}
+
+
 /* Subprompt list */
-.sub-prompts-contaier-main { width: 100%; }
-.sub-prompts-contaier-ff { display: grid; gap: 6px; padding: 8px 6px 2px; }
 .sub-prompts-oopp {
   background: var(--chip-bg);
   color: var(--brand-indigo);
-  border-radius: 8px;
   border: 1px solid transparent;
-  padding: 10px 12px; font-size: 13px; font-weight: 600;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 10px;
+
+  /* cuts on bottom-left & bottom-right */
+  -webkit-clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - var(--chip-cut)),
+    calc(100% - var(--chip-cut)) 100%,
+    var(--chip-cut) 100%,
+    0 calc(100% - var(--chip-cut))
+  );
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - var(--chip-cut)),
+    calc(100% - var(--chip-cut)) 100%,
+    var(--chip-cut) 100%,
+    0 calc(100% - var(--chip-cut))
+  );
 }
 
 /* Style buttons grid */
 .whole-style-container { width: 100%; }
 .whole-style-container h2 { font-size: 14px; font-weight: 700; margin: 10px 0 8px; }
-.style-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding-top: 20px; padding-bottom: 20px;}
-.style-container button {
-  height: 48px; background: transparent; border: 2px solid #fff; color: #fff; border-radius: 8px; font-size: 15px;
+.style-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2x2 grid */
+  gap: 10px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
-.buttonGG-rf {
- padding: 10px 20px;
+
+.style-box {
+  position: relative;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 0; /* no rounded corners */
+
+  /* Inactive: faint bg + white border */
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+
+  /* bottom-left cut */
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    14px 100%,
+    0 calc(100% - 14px)
+  );
 }
+
+/* Fake border so it follows clip-path */
+.style-box::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: inherit;
+  border: 1px solid #fff;
+  pointer-events: none;
+}
+
+/* Hover on inactive */
+.style-box:hover {
+  background: rgba(255,255,255,0.12);
+}
+
+/* Active */
+.style-box.is-active {
+  background: #fff;
+  color: var(--col);
+  box-shadow: 0 0 12px rgba(255,255,255,0.35);
+}
+.style-box.is-active::before {
+  border: 3px solid #fff;
+}
+
+.submit {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 2%;
+}
+
+.buttonGG-rf,
+.resetButton {
+  height: 120px;
+  padding: 0 22px;
+  font-size: 18px;
+  font-weight: 700;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  border: 2px solid var(--frame-blue);
+  background: #fff;
+  color: var(--frame-blue);
+}
+
+/* Hover/Active glow */
+.buttonGG-rf:hover,
+.resetButton:hover {
+  background: var(--frame-blue);
+  color: #fff;
+  box-shadow: 0 0 14px rgba(18, 95, 243, 0.55);
+}
+
+/* Submit: cut bottom-left */
+.submitBtn {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    20px 100%,
+    0 calc(100% - 20px)
+  );
+}
+
+/* Reset: cut bottom-right */
+.resetBtn {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 20px),
+    calc(100% - 20px) 100%,
+    0 100%
+  );
+}
+
 /* Line art selector tweaks */
 .whole-line-art-g-container { margin: 18px 0; }
 .whole-line-art-g-container h4 { font-weight: 700; }
-.main-line-art-selector { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding-top: 15px; padding-bottom: 15px; }
-.line-art-boxes { padding: 8px; border-radius: 10px; text-align: center; cursor: pointer; }
-.sub-lineart-image-selector { display: grid; grid-auto-flow: column; gap: 10px; align-items: center;  }
-.main-sub-image-main-lineart { display: grid; gap: 6px; justify-items: center; }
-.linert-gg55op { cursor: grab; border: 1px solid #fff; border-radius: 12px; padding: 10px; width: 110px; display: grid; place-items: center; }
-.inside-image-line-art { width: 90px; height: 64px; object-fit: contain; }
+.main-line-art-selector {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.line-art-boxes {
+  position: relative;  /* allow ::before overlay */
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;                /* remove default border */
+  background: rgba(255,255,255,0.08);  /* faint bg for inactive */
+  color: #ffffff;
+  font-weight: 600;
+  user-select: none;
+  cursor: pointer;
+  transition: all .2s ease;
+  border-radius: 0;
+
+  /* Cut bottom-left corner */
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    20px 100%,
+    0 calc(100% - 20px)
+  );
+}
+
+/* Fake border so it follows the clip-path */
+.line-art-boxes::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: inherit;
+  border: 1px solid #fff;
+  pointer-events: none;   /* don't block clicks */
+}
+
+/* Hover/focus on inactive */
+.line-art-boxes:hover,
+.line-art-boxes:focus-visible {
+  background: rgba(255,255,255,0.12);
+  outline: none;
+}
+
+/* Active tab */
+.line-art-boxes.is-active {
+  background: #ffffff;
+  color: var(--col);
+  box-shadow: 0 0 12px rgba(255,255,255,0.35);
+}
+.line-art-boxes.is-active::before {
+  border: 3px solid #fff; /* thicker stroke for active */
+}
+
+.line-art-boxes p { margin: 0; }
+
+/* ========== Line Art: Sub-image scroller ========== */
+.sub-lineart-image-selector {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Optional: previous/next buttons (your inline styles can stay if you prefer) */
+.sub-lineart-image-selector > button {
+  width: 30px;
+  height: 30px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+/* ========== Tile wrapper around each sub-image ========== */
+.linert-gg55op {
+  /* Adjust the notch here */
+  --cut: 16px;
+
+  position: relative;
+  width: 110px;
+  padding: 10px;
+  display: grid;
+  place-items: center;
+
+  cursor: grab;
+  border-radius: 0;                          /* no rounded corners */
+  border: none;                              /* border drawn via ::before */
+  background: rgba(255, 255, 255, 0.10);     /* low-opacity inactive bg */
+
+  /* Clip TOP-RIGHT + BOTTOM-LEFT corners at ~45° */
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--cut)) 0,
+    100% var(--cut),
+    100% 100%,
+    var(--cut) 100%,
+    0 calc(100% - var(--cut))
+  );
+
+  transition: background .18s ease, box-shadow .18s ease, transform .08s ease;
+}
+
+/* White border that follows the clipped shape (also shows on the diagonal cuts) */
+.linert-gg55op::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: inherit;
+  pointer-events: none;
+  border: 1px solid #fff;                    /* inactive stroke */
+}
+
+/* Hover/Focus */
+.linert-gg55op:hover,
+.linert-gg55op:focus-visible {
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.20);
+  outline: none;
+}
+
+/* Active/Selected state (optional: add .is-active from JS when chosen) */
+.linert-gg55op.is-active {
+  background: rgba(255, 255, 255, 0.22);
+}
+.linert-gg55op.is-active::before {
+  border-width: 3px;                         /* thicker white stroke */
+}
+
+/* Pressed feel while dragging */
+.linert-gg55op:active {
+  cursor: grabbing;
+  transform: translateY(1px);
+}
+
+/* Image inside the tile */
+.inside-image-line-art {
+  width: 90px;
+  height: 64px;
+  object-fit: contain;
+  display: block;
+}
+
+/* ========== (Optional) Main grid if you render multiple rows of tiles ========== */
+.main-sub-image-main-lineart {
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+}
+
 
 /* Range */
-input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 16px; border-radius: 16px; background: #e9ecf5; overflow: hidden; cursor: pointer; }
-input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; height: 16px; width: 16px; background: #fff; border: 2px solid var(--brand-indigo); border-radius: 50%; box-shadow: -1000px 0 0 1000px var(--brand-indigo); }
-input[type="range"]::-moz-range-thumb { height: 16px; width: 16px; background: #fff; border: 2px solid var(--brand-indigo); border-radius: 50%; box-shadow: -1000px 0 0 1000px var(--brand-indigo); }
 
 /* Mobile notice */
 .mobileView { display: grid; place-items: center; height: 100vh; width: 100vw; background: #fff; color: #333; padding: 20px; text-align: center; }

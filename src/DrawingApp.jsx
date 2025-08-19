@@ -5,6 +5,7 @@ import LineArtSelector from "./LineArtSelector";
 import { useNavigate } from "react-router-dom";
 import Loading from "./Loading";
 import { ImageContext } from "../src/ImageContext";
+import { FaPaintBrush, FaEraser } from "react-icons/fa";
 
 const MAX_TRIALS = 3;
 
@@ -281,11 +282,25 @@ const DrawingApp = () => {
                       onChange={(e) => setBrushSize(parseInt(e.target.value, 10))} />
                   </div>
                   <div className="bothGContainer">
-                    <button onClick={toggleEraser} className="brushButton">
-                      <span>{eraserMode ? 'Brush' : 'Eraser'}</span>
-                    </button>
-                    <button onClick={clearCanvas} className="resetButton"><p>Reset</p></button>
-                  </div>
+  <button
+    onClick={() => setEraserMode(false)}
+    className={`brushButton brush ${!eraserMode ? 'active' : ''}`}
+  >
+    <FaPaintBrush className="btnIcon" />
+    Brush
+  </button>
+
+  <button
+    onClick={() => setEraserMode(true)}
+    className={`brushButton eraser ${eraserMode ? 'active' : ''}`}
+  >
+    <FaEraser className="btnIcon" />
+    Eraser
+  </button>
+</div>
+
+
+
                 </div>
               </div>
 
@@ -305,18 +320,19 @@ const DrawingApp = () => {
 
                 <div className="mainthemcont">
                   <div className="oggng">
-                    {['Robot','Space','Drone','SuperCore'].map((item) => (
-                      <div key={item}
-                        onClick={() => handlePromptSelect(item)}
-                        className={{Robot:'selecttheme-cc',Space:'selecttheme-bb',Drone:'selecttheme-aa',SuperCore:'selecttheme-dd'}[item]}
-                        style={{
-                          border: prompt === item ? '2px solid #fff' : '1px solid #ccc',
-                          backgroundColor: prompt === item ? '#D12028' : 'transparent',
-                          color: prompt === item ? '#fff' : '#000'
-                        }}
-                      >{item}</div>
-                    ))}
-                  </div>
+    {['Robot','Space','Drone','SuperCore'].map((item) => {
+      const isActive = prompt === item;
+      return (
+        <div
+          key={item}
+          onClick={() => handlePromptSelect(item)}
+          className={`selecttheme-box ${isActive ? 'is-active' : ''}`}
+        >
+          {item}
+        </div>
+      );
+    })}
+  </div>
 
                   {subPrompts.length > 0 && (
                     <div className="sub-prompts-contaier-main">
@@ -339,18 +355,31 @@ const DrawingApp = () => {
                 <div className="whole-style-container">
                   <h2>SELECT STYLE</h2>
                   <div className="style-container">
-                    {['Neon Punk','Fantasy Art','Watercolor','Sketch'].map((s) => (
-                      <button key={s} onClick={() => handleStyleSelect(s)}
-                        style={{ borderColor: selectedStyle === s ? '#fff' : '#ffffff88', outline: selectedStyle === s ? '3px solid #ffffff55' : 'none' }}
-                      >{s}</button>
-                    ))}
-                  </div>
+  {['Neon Punk','Fantasy Art','Watercolor','Sketch'].map((s) => {
+    const isActive = selectedStyle === s;
+    return (
+      <button
+        key={s}
+        onClick={() => handleStyleSelect(s)}
+        className={`style-box ${isActive ? 'is-active' : ''}`}
+      >
+        {s}
+      </button>
+    );
+  })}
+</div>
+
                 </div>
 
                 <div className="submit">
-                
-                <button className="buttonGG-rf" onClick={handleSubmit}>Generate</button>
-                </div>
+  <button className="buttonGG-rf submitBtn" onClick={handleSubmit}>
+    Submit
+  </button>
+  <button onClick={clearCanvas} className="resetButton resetBtn">
+    Reset
+  </button>
+</div>
+
               </div>
             </>
           )}

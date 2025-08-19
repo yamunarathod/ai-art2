@@ -65,26 +65,24 @@ const LineArtSelector = ({ onLineArtSelect }) => {
 
       {/* Shape group */}
       <div className="main-line-art-selector" role="tablist" aria-label="Shape categories">
-        {lineArtDivs.map((lineArt, index) => (
-          <div
-            key={index}
-            role="tab"
-            aria-selected={activeIndex === index}
-            tabIndex={0}
-            onClick={() => { setActiveIndex(index); setSubImageIndex(0); }}
-            onKeyDown={(e) => { if (e.key === 'Enter') { setActiveIndex(index); setSubImageIndex(0); } }}
-            className="line-art-boxes"
-            style={{
-              border: activeIndex === index ? "3px solid #FFFFFF" : "1px solid #fff",
-              background: activeIndex === index ? "#504C9C" : "#322554",
-              color: "#fff",
-              fontFamily: activeIndex === index ? "bold, sans-serif" : "inherit",
-            }}
-          >
-            <p>{lineArt.text}</p>
-          </div>
-        ))}
+  {lineArtDivs.map((lineArt, index) => {
+    const isActive = activeIndex === index;
+    return (
+      <div
+        key={index}
+        role="tab"
+        aria-selected={isActive}
+        tabIndex={0}
+        onClick={() => { setActiveIndex(index); setSubImageIndex(0); }}
+        onKeyDown={(e) => { if (e.key === 'Enter') { setActiveIndex(index); setSubImageIndex(0); } }}
+        className={`line-art-boxes ${isActive ? 'is-active' : ''}`}
+      >
+        <p>{lineArt.text}</p>
       </div>
+    );
+  })}
+</div>
+
 
       {/* Sub images carousel */}
       <div className="sub-lineart-image-selector">
@@ -112,7 +110,7 @@ const LineArtSelector = ({ onLineArtSelect }) => {
               >
                 <img src={subImage.icon} alt={subImage.text} className="inside-image-line-art" />
               </div>
-              <p style={{ fontSize: 12, textAlign: "center", color: "white" }}>{subImage.text}</p>
+              
             </div>
           ))}
 
