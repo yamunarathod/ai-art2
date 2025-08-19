@@ -29,21 +29,24 @@
   place-items: center;
   padding: 24px;
   margin-left: 8%;
+  background-image: url("/public/output-canvas.png");
+  /* To make the background image not repeat */
+  background-repeat: no-repeat;
+  /* To set the width and height of the background image */
+  background-size: 88% 75%; /* This will scale the background image to be as large as possible to cover the entire container */
+  /* To set the position of the background image */
+  background-position: center; /* This will center the background image */
 }
 
 .result-image {
-  background: transparent;
-
   margin-left: 0;
   aspect-ratio: auto;
-
   /* add border + clipping */
-  border: 8px solid var(--frame-blue);
   clip-path: polygon(
     0 0,
     /* top-left */ 100% 0,
-    /* top-right */ 100% calc(100% - 100px),
-    /* bottom-right diagonal start */ calc(100% - 100px) 100%,
+    /* top-right */ 100% calc(100% - 150px),
+    /* bottom-right diagonal start */ calc(100% - 140px) 100%,
     /* bottom-right diagonal cut */ 0 100% /* bottom-left */
   );
 }
@@ -76,31 +79,22 @@
   align-content: center;
   gap: 24px;
   padding: 28px;
-  margin-right: 16%;
+  margin-right: 8%;
 }
 
 .qr-code {
-  background: rgba(255, 255, 255, 0.5);
-  padding: 26px;
-  border: 3px solid #fff;
-
-  /* add clip-path with diagonal cuts */
-  clip-path: polygon(
-    0 0,
-    /* top-left */ calc(100% - 30px) 0,
-    /* right-top cut start */ 100% 30px,
-    /* right-top diagonal */ 100% 100%,
-    /* bottom-right */ 30px 100%,
-    /* bottom-left cut start */ 0 calc(100% - 30px) /* bottom-left diagonal */
-  );
+  background-image: url("/public/qr-code-card.png");
+  padding: 35px;
 }
+
+
 
 .redraw-button {
   background: var(--frame-blue); /* always theme color */
   color: #fff;
   font-weight: 700;
   font-size: 20px;
-  height: 74px; /* same height as other buttons */
+  height: 94px; /* same height as other buttons */
   width: 310px;
   border: none;
   border-radius: 0; /* no rounded edges */
