@@ -1,0 +1,10 @@
+.ui-screen {
+  background-image: url('/public/bg13.png');
+  background-size: cover;
+  background-position: center;
+  border-radius: 8px;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+// ... existing code ...

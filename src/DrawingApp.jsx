@@ -355,7 +355,8 @@ const DrawingApp = () => {
                 <div className="whole-style-container">
                   <h2>SELECT STYLE</h2>
                   <div className="style-container">
-  {['Neon Punk','Fantasy Art','Watercolor','Sketch'].map((s) => {
+  {['Neon Punk','Fantasy Art','Steampunk','Digital Art'].map((s) => {
+
     const isActive = selectedStyle === s;
     return (
       <button

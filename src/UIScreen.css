@@ -1,17 +1,104 @@
 .ui-screen { border-radius: 8px; height: 100vh; width: 100vw; overflow: hidden; }
+.ui-screen {
+  background-image: url('/public/bg13.png');
+  background-size: cover;
+  background-position: center;
+  border-radius: 8px;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
 .content { display: grid; grid-template-columns: 1fr 420px; height: 100%; }
 @media (max-width: 1024px) { .content { grid-template-columns: 1fr; } }
 
-.image-area { display: grid; place-items: center; padding: 24px; }
-.result-image { background: transparent; padding: 6px; margin-left: 0; aspect-ratio: auto; }
-.result-image img { width: 100%; max-width: 1100px; object-fit: contain; border-radius: 8px; }
+.image-area { 
+  display: grid; 
+  place-items: center; 
+  padding: 24px;  
+  margin-left: 8%; 
+}
+
+.result-image { 
+  background: transparent; 
+
+  margin-left: 0; 
+  aspect-ratio: auto;
+
+  /* add border + clipping */
+  border: 8px solid var(--frame-blue);
+  clip-path: polygon(
+    0 0,                           /* top-left */
+    100% 0,                        /* top-right */
+    100% calc(100% - 100px),        /* bottom-right diagonal start */
+    calc(100% - 100px) 100%,        /* bottom-right diagonal cut */
+    0 100%                         /* bottom-left */
+  );
+}
+
+.result-image img { 
+  width: 100%; 
+  max-width: 1900px; 
+  object-fit: contain;  
+}
+
 
 .art-image { background: #fff; border-radius: 8px; padding: 10px; width: 260px; position: absolute; bottom: 12%; right: 38%; box-shadow: 0 6px 20px rgba(0,0,0,.16); }
 .art-image img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
 
-.qr-area { display: grid; align-content: center; gap: 24px; padding: 24px; }
-.qr-code { background: rgba(255,255,255,.5); padding: 16px; border-radius: 12px; border: 3px solid #fff; }
-.redraw-button { background: #fff; color: #8b5cf6; border-radius: 10px; font-weight: 700; font-size: 18px; height: 48px; width: 260px; border: none; }
-.redraw-button:hover { background: #f3e8ff; }
-.download-info { color: #fff; text-align: left; }
-.download-info h2 { font-size: 22px; font-weight: 800; margin: 6px 0; }
+.qr-area { 
+  display: grid; 
+  align-content: center; 
+  gap: 24px; 
+  padding: 28px; 
+  margin-right: 16%; 
+}
+
+.qr-code { 
+  background: rgba(255,255,255,.5); 
+  padding: 26px;  
+  border: 3px solid #fff;
+
+  /* add clip-path with diagonal cuts */
+  clip-path: polygon(
+    0 0,                        /* top-left */
+    calc(100% - 30px) 0,        /* right-top cut start */
+    100% 30px,                  /* right-top diagonal */
+    100% 100%,                  /* bottom-right */
+    30px 100%,                  /* bottom-left cut start */
+    0 calc(100% - 30px)         /* bottom-left diagonal */
+  );
+}
+
+.redraw-button {
+  background: var(--frame-blue);   /* always theme color */
+  color: #fff;
+  font-weight: 700;
+  font-size: 20px;
+  height: 74px;                  /* same height as other buttons */
+  width: 310px;
+  border: none;
+  border-radius: 0;              /* no rounded edges */
+  cursor: pointer;
+  margin-top: 50%;
+  margin-bottom: -45%;
+
+  /* cut bottom-left corner */
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    20px 100%,
+    0 calc(100% - 20px)
+  );
+
+  transition: all 0.2s ease;
+}
+
+/* Hover glow */
+.redraw-button:hover {
+  box-shadow: 0 0 14px rgba(18, 95, 243, 0.55);
+  filter: brightness(1.05);
+}
+
+.download-info { color: #fff; text-align: center; }
+.download-info h2 { font-size: 28px; font-weight: 800; margin: 6px 0; }
