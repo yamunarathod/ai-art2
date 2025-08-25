@@ -494,6 +494,10 @@ p {
   color: var(--frame-blue);
 }
 
+canvas {
+  touch-action: none; /* disables browser gestures */
+}
+
 /* Remove hover effects for Submit and Reset buttons */
 
 /* Submit button with PNG background */
