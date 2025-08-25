@@ -58,7 +58,7 @@ const DrawingApp = () => {
     const context = canvas.getContext("2d");
     context.lineCap = "round";
     context.lineJoin = "round";
-    context.lineWidth = brushSize;
+    context.lineWidth = eraserMode ? brushSize * 15 : brushSize;
     context.strokeStyle = eraserMode ? "#FFFFFF" : brushColor;
     context.beginPath();
     context.moveTo(x, y);
@@ -235,14 +235,14 @@ const DrawingApp = () => {
       formData.append("image", imageBlob, "drawing.png");
 
       const response = await axios.post(
-        "http://localhost:5000/generate-image/",
+        "https://sea-turtle-app-vy9lk.ondigitalocean.app/generate-image/",
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
       if (response.data.status === "success") {
         const imageUrl = response.data.image_url.startsWith("http")
           ? response.data.image_url
-          : `http://localhost:5000/${response.data.image_url}`;
+          : `https://sea-turtle-app-vy9lk.ondigitalocean.app/${response.data.image_url}`;
         const generatedBlob = await fetchImageBlob(imageUrl);
         const supabaseUrl = await uploadToSupabase(generatedBlob);
         setCanvasDrawingUrl(canvasDrawingUrl);
