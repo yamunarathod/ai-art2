@@ -24,8 +24,13 @@ body,
 #root {
   height: 100%;
 }
+@font-face {
+  font-family: 'FONTSPRING DEMO - All Round Gothic Bold';
+  src: url('Demo_Fonts/Fontspring-DEMO-allroundgothic-bold.otf') format('opentype');
+}
+
 body {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'FONTSPRING DEMO - All Round Gothic Bold', sans-serif;
   background: var(--app-bg) url("/bg22.png") center / cover no-repeat fixed;
   color: var(--text);
   overflow: hidden;
