@@ -73,22 +73,44 @@ const DrawingApp = () => {
   };
   const stopDrawing = () => setIsDrawing(false);
 
+  /* Get accurate canvas coordinates */
+  const getCanvasCoordinates = (clientX, clientY) => {
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY
+    };
+  };
+
   /* Mouse & touch bindings */
   const handleTouchStart = (e) => {
+    e.preventDefault();
     const t = e.touches[0];
-    const r = canvasRef.current.getBoundingClientRect();
-    startDrawing(t.clientX - r.left, t.clientY - r.top);
+    const coords = getCanvasCoordinates(t.clientX, t.clientY);
+    startDrawing(coords.x, coords.y);
   };
   const handleTouchMove = (e) => {
+    e.preventDefault();
     const t = e.touches[0];
-    const r = canvasRef.current.getBoundingClientRect();
-    draw(t.clientX - r.left, t.clientY - r.top);
+    const coords = getCanvasCoordinates(t.clientX, t.clientY);
+    draw(coords.x, coords.y);
   };
-  const handleTouchEnd = () => stopDrawing();
-  const handleMouseDown = (e) =>
-    startDrawing(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
-  const handleMouseMove = (e) =>
-    draw(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+  const handleTouchEnd = (e) => {
+    e.preventDefault();
+    stopDrawing();
+  };
+  const handleMouseDown = (e) => {
+    const coords = getCanvasCoordinates(e.clientX, e.clientY);
+    startDrawing(coords.x, coords.y);
+  };
+  const handleMouseMove = (e) => {
+    const coords = getCanvasCoordinates(e.clientX, e.clientY);
+    draw(coords.x, coords.y);
+  };
   const handleMouseUp = () => stopDrawing();
 
   /* Image drag within image canvas */
@@ -111,32 +133,29 @@ const DrawingApp = () => {
   };
   const handleMouseMoveImage = (e) => {
     if (!isDraggingImage || currentImageIndex === null) return;
-    const mouseX = e.nativeEvent.offsetX,
-      mouseY = e.nativeEvent.offsetY;
+    const coords = getCanvasCoordinates(e.clientX, e.clientY);
     const updated = [...lineArtImages];
     updated[currentImageIndex].position = {
-      x: mouseX - dragOffset.x,
-      y: mouseY - dragOffset.y,
+      x: coords.x - dragOffset.x,
+      y: coords.y - dragOffset.y,
     };
     setLineArtImages(updated);
   };
   const handleMouseDownImage = (e) => {
-    const rect = canvasRef.current.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left,
-      mouseY = e.clientY - rect.top;
+    const coords = getCanvasCoordinates(e.clientX, e.clientY);
     let found = false;
     lineArtImages.forEach((image, index) => {
       if (
-        mouseX >= image.position.x &&
-        mouseX <= image.position.x + image.size.width &&
-        mouseY >= image.position.y &&
-        mouseY <= image.position.y + image.size.height
+        coords.x >= image.position.x &&
+        coords.x <= image.position.x + image.size.width &&
+        coords.y >= image.position.y &&
+        coords.y <= image.position.y + image.size.height
       ) {
         setCurrentImageIndex(index);
         setIsDraggingImage(true);
         setDragOffset({
-          x: mouseX - image.position.x,
-          y: mouseY - image.position.y,
+          x: coords.x - image.position.x,
+          y: coords.y - image.position.y,
         });
         found = true;
       }
@@ -145,18 +164,20 @@ const DrawingApp = () => {
   };
   const handleMouseUpImage = () => setIsDraggingImage(false);
   const handleTouchStartImage = (e) => {
+    e.preventDefault();
     const t = e.touches[0];
-    const r = canvasRef.current.getBoundingClientRect();
-    handleImageDragStart(t.clientX - r.left, t.clientY - r.top);
+    const coords = getCanvasCoordinates(t.clientX, t.clientY);
+    handleImageDragStart(coords.x, coords.y);
   };
   const handleTouchMoveImage = (e) => {
+    e.preventDefault();
     if (!isDraggingImage || currentImageIndex === null) return;
     const t = e.touches[0];
-    const r = canvasRef.current.getBoundingClientRect();
+    const coords = getCanvasCoordinates(t.clientX, t.clientY);
     const updated = [...lineArtImages];
     updated[currentImageIndex].position = {
-      x: t.clientX - r.left - dragOffset.x,
-      y: t.clientY - r.top - dragOffset.y,
+      x: coords.x - dragOffset.x,
+      y: coords.y - dragOffset.y,
     };
     setLineArtImages(updated);
   };
@@ -395,12 +416,10 @@ const DrawingApp = () => {
                     className="canvasgg"
                     width="1192"
                     height="730"
-                    onMouseDown={(e) =>
-                      handleImageDragStart(
-                        e.nativeEvent.offsetX,
-                        e.nativeEvent.offsetY
-                      )
-                    }
+                    onMouseDown={(e) => {
+                      const coords = getCanvasCoordinates(e.clientX, e.clientY);
+                      handleImageDragStart(coords.x, coords.y);
+                    }}
                     onMouseMove={handleMouseMoveImage}
                     onMouseUp={handleMouseUpImage}
                   />
