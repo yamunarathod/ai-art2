@@ -1,8 +1,8 @@
 :root {
-  --app-bg: #233f80; /* page bg under hero */
-  --frame-blue: #125ff3;
-  --col: #2244a2; /* canvas frame */
-  --brand-indigo: #0f4aba; /* accents */
+  --app-bg: #D33A33; /* page bg under hero */
+  --frame-blue: #D33A33;
+  --col: #D33A33; /* canvas frame */
+  --brand-indigo: #D33A33; /* accents */
   --panel-purple: #322554; /* dark panel */
   --panel-lilac: #504c9c; /* active chip */
   --text: #ffffff;
@@ -25,13 +25,13 @@ body,
   height: 100%;
 }
 @font-face {
-  font-family: 'FONTSPRING DEMO - All Round Gothic Bold';
-  src: url('Demo_Fonts/Fontspring-DEMO-allroundgothic-bold.otf') format('opentype');
+  font-family: 'Bangers';
+  src: url('Demo_Fonts/Bangers-Regular.ttf') format('truetype');
 }
 
 body {
-  font-family: 'FONTSPRING DEMO - All Round Gothic Bold', sans-serif;
-  background: var(--app-bg) url("/bg22.png") center / cover no-repeat fixed;
+  font-family: 'Bangers', sans-serif;
+  background: var(--app-bg) url("/bg13.png") center / cover no-repeat fixed;
   color: var(--text);
   overflow: hidden;
 }
@@ -75,7 +75,7 @@ p {
   height: 100%;
   width: 80%;
   gap: 20px;
-  margin-left: 13%;
+  margin-left: 10px;
 }
 
 /* Canvas frame with angled bottom-right like in your Figma */
@@ -83,8 +83,9 @@ p {
   position: relative;
   display: grid;
   place-items: center;
-  width: 100%;
-  height: 110%;
+  margin-top: 12%;
+  width: 115%;
+  height: 80%;
   background: #fff;
   border: 5px solid var(--frame-blue);
   padding: 10px; /* inner frame padding */
@@ -141,7 +142,8 @@ p {
 .downContainer {
   display: grid;
   gap: 16px;
-  margin-top: 9%;
+  margin-top: 0%;
+  margin-left: 13%;
 }
 
 .brushRest input[type="range"] {
@@ -171,7 +173,7 @@ p {
   appearance: none;
   width: 36px; /* bigger knob */
   height: 36px;
-  background: #3a6df0;
+  background: #D33A33;
   border: none;
   border-radius: 8px; /* square with slight rounding, change to 50% for circle */
   cursor: pointer;
@@ -180,7 +182,7 @@ p {
 .brushRest input[type="range"]::-moz-range-thumb {
   width: 36px;
   height: 36px;
-  background: #3a6df0;
+  background: #D33A33;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -197,8 +199,9 @@ p {
   width: 524px;
   height: 64px;
   padding: 0 22px;
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 24px;
+  font-weight: normal;
+  font-family: 'Bangers', sans-serif;
   position: relative;
   z-index: 10;
 
@@ -222,12 +225,21 @@ p {
   background-size: 524px 64px;
   background-repeat: no-repeat;
   background-position: center;
-  color: #fff; /* White text for Brush */
+  color: #fff !important; /* Always white text for Brush */
+}
+
+.brushButton.brush img {
+  filter: none !important; /* Keep brush icon white */
 }
 
 .brushButton.brush.active {
   opacity: 0.9;
   box-shadow: 0 0 16px rgba(34, 68, 162, 0.6);
+  color: #fff !important; /* Always white text for Brush */
+}
+
+.brushButton.brush.active img {
+  filter: none !important; /* Keep brush icon white */
 }
 
 /* Eraser button with PNG background */
@@ -236,12 +248,21 @@ p {
   background-size: 524px 64px;
   background-repeat: no-repeat;
   background-position: center;
-  color: #2244a2; /* #2244A2 text for Eraser */
+  color: #D33A33 !important; /* Always red text for Eraser */
+}
+
+.brushButton.eraser img {
+  filter: brightness(0) saturate(100%) invert(20%) sepia(95%) saturate(4274%) hue-rotate(344deg) brightness(89%) contrast(95%) !important; /* Keep eraser icon red */
 }
 
 .brushButton.eraser.active {
   opacity: 0.9;
   box-shadow: 0 0 16px rgba(34, 68, 162, 0.6);
+  color: #D33A33 !important; /* Always red text for Eraser */
+}
+
+.brushButton.eraser.active img {
+  filter: brightness(0) saturate(100%) invert(20%) sepia(95%) saturate(4274%) hue-rotate(344deg) brightness(89%) contrast(95%) !important; /* Keep eraser icon red */
 }
 
 /* Right panel */
@@ -253,12 +274,14 @@ p {
   width: 100%;
   padding-right: 4px;
   margin-left: -15%;
+  font-size: 20px;
+
 }
 
 .clasgg-h2 {
   color: #fff;
-  font-weight: 700;
-  font-size: 14px;
+  font-weight: normal;
+  font-size: 20px;
   letter-spacing: 0.2px;
   margin: 0 0 16px 0; /* Standard title to content spacing */
 }
@@ -269,12 +292,13 @@ p {
 }
 .imageResize-container {
   margin: 0 0 24px 0; /* Standard section spacing */
+  font-size: 20px;
 }
 
 .imageResize-container h3 {
   margin: 0 0 16px 0; /* Standard title to content spacing */
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: normal;
   color: #fff;
 }
 
@@ -317,8 +341,8 @@ p {
   appearance: none;
   width: 24px; /* big button */
   height: 34px;
-  background: #3a6df0; /* knob color (change if needed) */
-  border: 2px solid #2450d6; /* subtle edge like ref */
+  background: #D33A33; /* knob color (change if needed) */
+  border: 2px solid #D33A33; /* subtle edge like ref */
   border-radius: 4px; /* square-ish; set 0 for perfect square */
   position: relative;
   z-index: 2;
@@ -327,8 +351,8 @@ p {
 .imageResize-con input[type="range"]::-moz-range-thumb {
   width: 34px;
   height: 34px;
-  background: #3a6df0;
-  border: 2px solid #2450d6;
+  background: #D33A33;
+  border: 2px solid #D33A33;
   border-radius: 4px;
   position: relative;
   z-index: 2;
@@ -354,17 +378,22 @@ p {
 
 .selecttheme-box {
   position: relative;
-  height: 42px;
+  height: 50px;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
-  color: #fff;
+  font-weight: normal;
+  font-size: 20px !important;
+  font-family: 'Bangers', sans-serif;
+  color: #D33A33;
   cursor: pointer;
   user-select: none;
   border: none;
   background-color: transparent;
   transition: all 0.2s ease;
+  padding: 8px 12px;
+  letter-spacing: 0.5px;
 
   /* Use same PNG as SELECT SHAPE */
   background-image: url("/select-shape-inactive-card.png");
@@ -381,16 +410,17 @@ p {
 /* Active */
 .selecttheme-box.is-active {
   background-image: url("/select-shape-active-card.png");
-  color: #2244a2;
+  color: #fff;
 }
 
 /* Subprompt list */
 .sub-prompts-oopp {
   position: relative;
-  color: #fff;
+  color: #D33A33;
   padding: 10px 12px;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: 0.8px;
+  font-weight: normal;
   margin-bottom: 8px; /* Consistent spacing between theme items */
   cursor: pointer;
   transition: all 0.2s ease;
@@ -412,17 +442,18 @@ p {
 /* Active subprompt styling */
 .sub-prompts-oopp.is-active {
   background-image: url("/theme-item-active-card.png");
-  color: #2244a2;
+  color: #fff;
 }
 
 /* Style buttons grid */
 .whole-style-container {
   width: 100%;
   margin-bottom: 24px; /* Standard section spacing */
+  font-size: 20px;
 }
 .whole-style-container h2 {
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: normal;
   margin: 0 0 16px 0; /* Standard title to content spacing */
   color: #fff;
 }
@@ -439,13 +470,14 @@ p {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: normal;
+  font-family: 'Bangers', sans-serif;
   cursor: pointer;
   user-select: none;
   border: none;
   background-color: transparent;
-  color: #fff;
+  color: #D33A33;
   transition: all 0.2s ease;
 
   /* Use PNG backgrounds with specific size */
@@ -463,13 +495,14 @@ p {
 /* Active */
 .style-box.is-active {
   background-image: url("/select-shape-active-card.png");
-  color: #2244a2;
+  color: #fff;
 }
 
 .submit {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
+  font-size: 32px ;
   margin-top: 24px; /* Standard spacing from previous section */
 }
 
@@ -477,8 +510,9 @@ p {
 .resetButton {
   height: 120px;
   padding: 0 22px;
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 32px;
+  font-weight: normal;
+  font-family: 'Bangers', sans-serif;
   position: relative;
   z-index: 10; /* ensure content is above pseudo-elements */
 
@@ -508,6 +542,7 @@ canvas {
   background-position: center;
   background-color: transparent;
   border: none;
+  font-family: 'Bangers', sans-serif;
   color: #fff !important;
 }
 
@@ -519,7 +554,8 @@ canvas {
   background-position: center;
   background-color: transparent;
   border: none;
-  color: #2244A2 !important;
+  font-family: 'Bangers', sans-serif;
+  color: #D33A33 !important;
 }
 
 /* Line art selector tweaks */
@@ -527,7 +563,7 @@ canvas {
   margin: 0 0 24px 0; /* Standard bottom margin */
 }
 .whole-line-art-g-container h4 {
-  font-weight: 700;
+  font-weight: normal;
   margin: 0 0 16px 0; /* Standard title to content spacing */
 }
 .main-line-art-selector {
@@ -543,8 +579,8 @@ canvas {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
-  font-weight: 600;
+  color: #D33A33;
+  font-weight: normal;
   user-select: none;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -568,7 +604,7 @@ canvas {
 /* Active tab */
 .line-art-boxes.is-active {
   background-image: url("/select-shape-active-card.png");
-  color: #2244a2;
+  color: #fff;
 }
 
 .line-art-boxes p {
@@ -656,7 +692,7 @@ canvas {
   height: 100vh;
   width: 100vw;
   background: #fff;
-  color: #333;
+  color: #D33A33;
   padding: 20px;
   text-align: center;
 }

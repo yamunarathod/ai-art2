@@ -1,7 +1,7 @@
 import React from "react";
 import '../index.css'
 const StyleSelector = ({ selectedStyle, handleStyleSelect }) => {
-  const styles = ["Fantasy Art", "Neon Punk", "Hyperrealism", "Comic Book"];
+  const styles = ["Neon Punk", "Hyperrealism", "Comic Book", "Digital Art"];
 
   return (
     <div className="styleSelector">
@@ -13,7 +13,7 @@ const StyleSelector = ({ selectedStyle, handleStyleSelect }) => {
             onClick={() => handleStyleSelect(style)}
             style={{
               backgroundColor: selectedStyle === style ? "#fff" : "transparent",
-              color: selectedStyle === style ? "#000" : "#fff",
+              color: selectedStyle === style ? "#fff" : "#D33A33",
             }}
           >
             {style}

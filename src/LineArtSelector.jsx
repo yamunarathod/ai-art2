@@ -6,8 +6,8 @@ const LineArtSelector = ({ onLineArtSelect }) => {
       src: "/a1.svg",
       text: "Robot",
       subImages: [
-        { src: "/dd/a1.svg", icon: "/d/a1.svg", text: "Mechanical robot" },
-        { src: "/dd/a3.svg", icon: "/d/a3.svg", text: "robot dog" },
+        { src: "/dd/a1.png", icon: "/d/a1.svg", text: "spiderman" },
+        { src: "/dd/a3.png", icon: "/d/a3.svg", text: "robot dog" },
         { src: "/dd/a4.svg", icon: "/d/a4.svg", text: "robot cat" },
         { src: "/dd/a5.svg", icon: "/d/a5.svg", text: "robot UFO" },
       ],

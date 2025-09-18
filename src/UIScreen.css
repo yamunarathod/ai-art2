@@ -26,27 +26,34 @@
 
 .image-area {
   display: grid;
-  place-items: center;
-  padding: 24px;
-  margin-left: 8%;
+  place-items: start;
+  align-items: end;
+  justify-items: start;
+;
+  padding: 30px;
+  margin-left: 4%;
+  margin-bottom: 2%;
   background-image: url("/public/output-canvas.png");
   /* To make the background image not repeat */
   background-repeat: no-repeat;
   /* To set the width and height of the background image */
-  background-size: 88% 75%; /* This will scale the background image to be as large as possible to cover the entire container */
+  background-size: 90% 82%; /* This will scale the background image to be as large as possible to cover the entire container */
   /* To set the position of the background image */
-  background-position: center; /* This will center the background image */
+  background-position: left bottom;
+   /* This will position the background image to left and bottom */
 }
 
 .result-image {
-  margin-left: 0;
+  width: 92.5%;
+  margin-left: -1.5%;
+  margin-bottom: -2%;
   aspect-ratio: auto;
   /* add border + clipping */
   clip-path: polygon(
     0 0,
     /* top-left */ 100% 0,
-    /* top-right */ 100% calc(100% - 150px),
-    /* bottom-right diagonal start */ calc(100% - 140px) 100%,
+    /* top-right */ 100% calc(100% - 165px),
+    /* bottom-right diagonal start */ calc(100% - 155px) 100%,
     /* bottom-right diagonal cut */ 0 100% /* bottom-left */
   );
 }
@@ -92,8 +99,9 @@
 .redraw-button {
   background: var(--frame-blue); /* always theme color */
   color: #fff;
-  font-weight: 700;
-  font-size: 20px;
+  font-weight: normal;
+  font-size: 32px;
+  font-family: 'Bangers', sans-serif;
   height: 94px; /* same height as other buttons */
   width: 310px;
   border: none;
@@ -119,7 +127,7 @@
   text-align: center;
 }
 .download-info h2 {
-  font-size: 28px;
-  font-weight: 800;
+  font-size: 32px;
+  font-weight: normal;
   margin: 6px 0;
 }

@@ -14,7 +14,7 @@ const DrawingApp = () => {
   const imageCanvasRef = useRef(null);
 
   const [isDrawing, setIsDrawing] = useState(false);
-  const [prompt, setPrompt] = useState("Robot");
+  const [prompt, setPrompt] = useState("Superhero");
   const [subPrompts, setSubPrompts] = useState([]);
   const [selectedSubPrompt, setSelectedSubPrompt] = useState("");
   const [finalPrompt, setFinalPrompt] = useState("");
@@ -287,34 +287,34 @@ const DrawingApp = () => {
     switch (selected) {
       case "Space":
         setSubPrompts([
-          "Astronaut walking on Mars",
-          "Futuristic city on asteroid",
+          "Astronaut floating near a space station.",
+          "Ringed planet with giant orbiting moons",
           "Explorer on alien planet",
-          "Garden inside space dome",
+          "Asteroid impacting a barren moon",
         ]);
         break;
-      case "Robot":
+      case "Superhero":
         setSubPrompts([
-          "Futuristic world under AI",
-          "Battle robot in arena",
-          "Giant robot guarding city",
-          "Humanoid robot repairing circuit",
+          "Dynamic hero flying over city",
+          "Vigilante leaping across dark rooftops",
+          "Cosmic hero surfing a nebula",
+          "Superhero team in epic battle",
         ]);
         break;
-      case "Drone":
+      case "Automobiles":
         setSubPrompts([
-          "Drone swarm over city",
-          "Futuristic world of drones",
-          "Skies patrolled by machines",
-          "Autonomous drones in war",
+          "Classic muscle car racing down highway",
+          "Jumbo jet taking off from runway.",
+          "Cargo ship crossing the ocean.",
+          "Off-road adventure through rugged terrain",
         ]);
         break;
-      case "SuperCore":
+      case "Anime":
         setSubPrompts([
-          "Supercore powering futuristic city",
-          "Energy core beneath world",
-          "Supercore meltdown in void",
-          "World sustained by supercore",
+          "Magical girl casting spells in moonlight",
+          "Mecha warrior defending Tokyo skyline",
+          "Samurai dueling in cherry blossom garden",
+          "School students discovering hidden powers",
         ]);
         break;
       default:
@@ -384,7 +384,7 @@ const DrawingApp = () => {
   };
 
   useEffect(() => {
-    handlePromptSelect("Robot");
+    handlePromptSelect("Superhero");
   }, []);
 
   return (
@@ -414,8 +414,8 @@ const DrawingApp = () => {
                   <canvas
                     ref={imageCanvasRef}
                     className="canvasgg"
-                    width="1192"
-                    height="730"
+                    width="1280"
+                    height="500"
                     onMouseDown={(e) => {
                       const coords = getCanvasCoordinates(e.clientX, e.clientY);
                       handleImageDragStart(coords.x, coords.y);
@@ -427,8 +427,8 @@ const DrawingApp = () => {
                   <canvas
                     ref={canvasRef}
                     className="canvasff"
-                    width="1192"
-                    height="730"
+                    width="1280"
+                    height="500"
                     onMouseDown={(e) => {
                       handleMouseDown(e);
                       handleMouseDownImage(e);
@@ -475,6 +475,7 @@ const DrawingApp = () => {
                         !eraserMode ? "active" : ""
                       }`}
                     >
+                      <img src="/brush.svg" alt="brush" style={{ width: "20px", height: "20px", marginRight: "8px" }} />
                       Brush
                     </button>
 
@@ -484,6 +485,7 @@ const DrawingApp = () => {
                         eraserMode ? "active" : ""
                       }`}
                     >
+                      <img src="/erase.svg" alt="eraser" style={{ width: "20px", height: "20px", marginRight: "8px" }} />
                       Eraser
                     </button>
                   </div>
@@ -520,7 +522,7 @@ const DrawingApp = () => {
                 <div className="theme">
                   <div className="mainthemcont">
                     <div className="oggng">
-                      {["Robot", "Space", "Drone", "SuperCore"].map((item) => {
+                      {["Superhero", "Space", "Automobiles", "Anime"].map((item) => {
                         const isActive = prompt === item;
                         return (
                           <div
@@ -561,8 +563,8 @@ const DrawingApp = () => {
                   <div className="style-container">
                     {[
                       "Neon Punk",
-                      "Fantasy Art",
-                      "Steampunk",
+                      "Hyperrealism",
+                      "Comic Book",
                       "Digital Art",
                     ].map((s) => {
                       const isActive = selectedStyle === s;
