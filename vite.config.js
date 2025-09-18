@@ -4,9 +4,9 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(),VitePWA({ 
+  plugins: [react(),VitePWA({
     registerType: 'autoUpdate',
-    includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+    includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg', '**/*.ttf', '**/*.otf'],
     manifest: {
       name: 'AI Art',
       short_name: 'AI Art',

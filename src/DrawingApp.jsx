@@ -218,7 +218,7 @@ const DrawingApp = () => {
   const uploadToSupabase = async (blob) => {
     const fileName = `generated_${Date.now()}.png`;
     const { error } = await supabase.storage
-      .from("images")
+      .from("art1")
       .upload(`gurgaon/${fileName}`, blob, {
         cacheControl: "3600",
         upsert: false,
@@ -227,9 +227,9 @@ const DrawingApp = () => {
       console.error("Upload error", error.message);
       return null;
     }
-    const publicURL = `https://olqlkvsmmzsjavlqbibd.supabase.co/storage/v1/object/public/images/gurgaon/${fileName}`;
+    const publicURL = `https://aczbckuwrnbidkncpkqf.supabase.co/storage/v1/object/public/art1/gurgaon/${fileName}`;
     const { error: insertError } = await supabase
-      .from("images")
+      .from("art1")
       .insert([{ url: publicURL }]);
     if (insertError) console.error("Insert error", insertError);
     return publicURL;

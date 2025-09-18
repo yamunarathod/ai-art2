@@ -34,13 +34,10 @@
   margin-left: 4%;
   margin-bottom: 2%;
   background-image: url("/public/output-canvas.png");
-  /* To make the background image not repeat */
   background-repeat: no-repeat;
-  /* To set the width and height of the background image */
-  background-size: 90% 82%; /* This will scale the background image to be as large as possible to cover the entire container */
-  /* To set the position of the background image */
+  background-size: 90% 82%; 
   background-position: left bottom;
-   /* This will position the background image to left and bottom */
+   
 }
 
 .result-image {

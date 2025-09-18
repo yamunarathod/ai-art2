@@ -26,7 +26,7 @@ body,
 }
 @font-face {
   font-family: 'Bangers';
-  src: url('Demo_Fonts/Bangers-Regular.ttf') format('truetype');
+  src: url('/Demo_Fonts/Bangers-Regular.ttf') format('truetype');
 }
 
 body {
