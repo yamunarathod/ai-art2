@@ -18,11 +18,17 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-touch-callout: none; /* Disable callout on iOS */
+  -webkit-user-select: none; /* Disable text selection */
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 html,
 body,
 #root {
   height: 100%;
+  overscroll-behavior: none; /* Prevent swipe navigation */
 }
 @font-face {
   font-family: 'Bangers';
@@ -34,6 +40,8 @@ body {
   background: var(--app-bg) url("/bg13.png") center / cover no-repeat fixed;
   color: var(--text);
   overflow: hidden;
+  overscroll-behavior-x: none; /* Prevent horizontal swipe navigation */
+  touch-action: pan-y pinch-zoom; /* Allow vertical scrolling but prevent horizontal navigation */
 }
 
 /* Kill default heading/paragraph margins to avoid trailing gaps */

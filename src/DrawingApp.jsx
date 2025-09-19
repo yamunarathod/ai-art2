@@ -387,6 +387,63 @@ const DrawingApp = () => {
     handlePromptSelect("Superhero");
   }, []);
 
+  /* Prevent swipe navigation gestures and context menu globally */
+  useEffect(() => {
+    const preventSwipeNavigation = (e) => {
+      // Prevent horizontal swipe gestures that trigger browser navigation
+      if (e.touches && e.touches.length === 1) {
+        const touch = e.touches[0];
+        const startX = touch.clientX;
+
+        const handleTouchMove = (moveEvent) => {
+          if (moveEvent.touches && moveEvent.touches.length === 1) {
+            const moveTouch = moveEvent.touches[0];
+            const deltaX = Math.abs(moveTouch.clientX - startX);
+            const deltaY = Math.abs(moveTouch.clientY - touch.clientY);
+
+            // If horizontal movement is greater than vertical, prevent default
+            if (deltaX > deltaY && deltaX > 50) {
+              moveEvent.preventDefault();
+            }
+          }
+        };
+
+        document.addEventListener('touchmove', handleTouchMove, { passive: false });
+
+        const handleTouchEnd = () => {
+          document.removeEventListener('touchmove', handleTouchMove);
+          document.removeEventListener('touchend', handleTouchEnd);
+        };
+
+        document.addEventListener('touchend', handleTouchEnd);
+      }
+    };
+
+    // Prevent context menu on right-click and two-finger tap
+    const preventContextMenu = (e) => {
+      e.preventDefault();
+      return false;
+    };
+
+    // Prevent two-finger tap context menu specifically
+    const preventTwoFingerTap = (e) => {
+      if (e.touches && e.touches.length === 2) {
+        e.preventDefault();
+        return false;
+      }
+    };
+
+    document.addEventListener('touchstart', preventSwipeNavigation, { passive: false });
+    document.addEventListener('contextmenu', preventContextMenu);
+    document.addEventListener('touchstart', preventTwoFingerTap, { passive: false });
+
+    return () => {
+      document.removeEventListener('touchstart', preventSwipeNavigation);
+      document.removeEventListener('contextmenu', preventContextMenu);
+      document.removeEventListener('touchstart', preventTwoFingerTap);
+    };
+  }, []);
+
   return (
     <>
       {loading && (
