@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { supabase } from "../supabaseClient";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import LineArtSelector from "./LineArtSelector";
 import { useNavigate } from "react-router-dom";
 import Loading from "./Loading";
@@ -14,10 +15,6 @@ const DrawingApp = () => {
   const imageCanvasRef = useRef(null);
 
   const [isDrawing, setIsDrawing] = useState(false);
-  const [prompt, setPrompt] = useState("Superhero");
-  const [subPrompts, setSubPrompts] = useState([]);
-  const [selectedSubPrompt, setSelectedSubPrompt] = useState("");
-  const [finalPrompt, setFinalPrompt] = useState("");
   const [brushColor, setBrushColor] = useState("#000");
   const [brushSize, setBrushSize] = useState(2);
   const [generatedImageUrl, setGeneratedImageUrl] = useState("");
@@ -39,9 +36,6 @@ const DrawingApp = () => {
   useEffect(() => {
     drawAllImages();
   }, [lineArtImages]);
-  useEffect(() => {
-    updateFinalPrompt();
-  }, [lineArtImages, selectedSubPrompt]);
 
   /* Desktop guard */
   useEffect(() => {
@@ -191,7 +185,6 @@ const DrawingApp = () => {
     dc.clearRect(0, 0, d.width, d.height);
     ic.clearRect(0, 0, i.width, i.height);
     setLineArtImages([]);
-    setFinalPrompt("");
   };
 
   const mergeCanvases = () => {
@@ -215,29 +208,44 @@ const DrawingApp = () => {
   const fetchImageBlob = async (url) =>
     (await axios.get(url, { responseType: "blob" })).data;
 
-  const uploadToSupabase = async (blob) => {
-    const fileName = `generated_${Date.now()}.png`;
-    const { error } = await supabase.storage
-      .from("art1")
-      .upload(`gurgaon/${fileName}`, blob, {
-        cacheControl: "3600",
-        upsert: false,
-      });
-    if (error) {
-      console.error("Upload error", error.message);
+  const uploadGeneratedImageToSupabase = async (blob) => {
+    try {
+      const fileName = `generated_art_${Date.now()}.png`;
+      const { error } = await supabase.storage
+        .from("art")
+        .upload(`images/${fileName}`, blob, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (error) {
+        console.error("Upload error:", error.message);
+        return null;
+      }
+
+      const publicURL = `https://ozkbnimjuhaweigscdby.supabase.co/storage/v1/object/public/art/images/${fileName}`;
+
+      // Try to save URL to database (optional - if table exists)
+      const { error: insertError } = await supabase
+        .from("art")
+        .insert([{ url: publicURL }]);
+
+      if (insertError) {
+        console.log("Note: Generated image saved to storage but not database (table might not exist)");
+      } else {
+        console.log("Generated image saved to both storage and database");
+      }
+
+      return publicURL;
+    } catch (error) {
+      console.error("Error uploading generated image:", error);
       return null;
     }
-    const publicURL = `https://aczbckuwrnbidkncpkqf.supabase.co/storage/v1/object/public/art1/gurgaon/${fileName}`;
-    const { error: insertError } = await supabase
-      .from("art1")
-      .insert([{ url: publicURL }]);
-    if (insertError) console.error("Insert error", insertError);
-    return publicURL;
   };
 
   const handleSubmit = async () => {
-    if (!finalPrompt || !selectedStyle) {
-      alert("Please select a sub-prompt, line art image, and a style.");
+    if (!selectedStyle) {
+      alert("Please select a style.");
       return;
     }
     if (remainingTrials <= 0) {
@@ -246,90 +254,194 @@ const DrawingApp = () => {
     }
     setLoading(true);
     try {
-      mergeCanvases();
-      const canvas = canvasRef.current;
-      const canvasDrawingUrl = canvas.toDataURL("image/png");
-      const imageBlob = await canvasToBlob();
-      const formData = new FormData();
-      formData.append("prompt", finalPrompt);
-      formData.append("style", selectedStyle);
-      formData.append("image", imageBlob, "drawing.png");
-
-      const response = await axios.post(
-        "https://sea-turtle-app-vy9lk.ondigitalocean.app/generate-image/",
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
-      if (response.data.status === "success") {
-        const imageUrl = response.data.image_url.startsWith("http")
-          ? response.data.image_url
-          : `https://sea-turtle-app-vy9lk.ondigitalocean.app/${response.data.image_url}`;
-        const generatedBlob = await fetchImageBlob(imageUrl);
-        const supabaseUrl = await uploadToSupabase(generatedBlob);
-        setCanvasDrawingUrl(canvasDrawingUrl);
-        setUploadedImageUrl(supabaseUrl);
-        if (supabaseUrl)
-          navigate("/result", {
-            state: { canvasDrawingUrl, uploadedImageUrl: supabaseUrl },
-          });
-      } else {
-        console.error("Backend error:", response.data.message);
+      // Check if canvas ref is available
+      if (!canvasRef.current) {
+        console.error("Canvas ref is null!");
+        alert("Canvas not ready. Please try again.");
+        setLoading(false);
+        return;
       }
+
+      mergeCanvases();
+
+      // Get displayed canvas dimensions
+      const canvas = canvasRef.current;
+      const canvasRect = canvas.getBoundingClientRect();
+      const displayedWidth = Math.round(canvasRect.width);
+      const displayedHeight = Math.round(canvasRect.height);
+
+      // Create a new canvas with white background using DISPLAYED dimensions
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = displayedWidth;
+      tempCanvas.height = displayedHeight;
+      const tempCtx = tempCanvas.getContext('2d');
+
+      // Fill with white background
+      tempCtx.fillStyle = '#FFFFFF';
+      tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+      // Draw the original canvas scaled to displayed size
+      tempCtx.drawImage(canvas, 0, 0, displayedWidth, displayedHeight);
+
+      const canvasDrawingUrl = canvas.toDataURL("image/png");
+
+      // Convert the temp canvas (with white bg) to blob for AI
+      const imageBlob = await new Promise((resolve) => {
+        tempCanvas.toBlob(resolve, "image/png");
+      });
+
+      // Convert blob to base64
+      const reader = new FileReader();
+      const base64Image = await new Promise((resolve) => {
+        reader.onloadend = () => resolve(reader.result.split(',')[1]);
+        reader.readAsDataURL(imageBlob);
+      });
+
+      const prompt = `Sketch to real art. Style: ${selectedStyle}`;
+
+      // Debug canvas content
+      const ctx = canvas.getContext('2d');
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const hasContent = imageData.data.some((pixel, index) =>
+        index % 4 !== 3 && pixel !== 255 // Check for non-white pixels (excluding alpha channel)
+      );
+
+      // Debug canvas content and dimensions
+      const displayedAspectRatio = displayedWidth / displayedHeight;
+
+      console.log("Canvas has drawing content:", hasContent);
+      console.log("Canvas INTERNAL resolution:", canvas.width, "x", canvas.height);
+      console.log("Canvas DISPLAYED size:", displayedWidth.toFixed(0), "x", displayedHeight.toFixed(0));
+      console.log("Canvas internal aspect ratio:", (canvas.width / canvas.height).toFixed(2));
+      console.log("Canvas displayed aspect ratio:", displayedAspectRatio.toFixed(2));
+      console.log("Temp canvas dimensions:", tempCanvas.width, "x", tempCanvas.height);
+      console.log("Temp canvas aspect ratio:", (tempCanvas.width / tempCanvas.height).toFixed(2));
+      console.log("Sending to Gemini API with prompt:", prompt);
+      console.log("Image data length:", base64Image.length);
+      console.log("Base64 sample (first 100 chars):", base64Image.substring(0, 100));
+
+      // Additional debugging
+      if (!hasContent) {
+        console.warn("⚠️ WARNING: Canvas appears to be empty! This might cause blank output.");
+      }
+      if (base64Image.length < 1000) {
+        console.warn("⚠️ WARNING: Image data is very small, might be empty canvas.");
+      }
+
+      // Initialize Google GenAI
+      const genAI = new GoogleGenerativeAI("AIzaSyDwsZ-_NmnEFnB9nn3a6qe8FHPVVSpEZSk");
+
+      // Use the correct model for image generation
+      const modelName = "gemini-2.5-flash-image-preview";
+      console.log("Using model:", modelName);
+      const model = genAI.getGenerativeModel({
+        model: modelName,
+        generationConfig: {
+          candidateCount: 1
+        }
+      });
+
+      // Format request for Gemini SDK
+      const requestPayload = [
+        prompt,
+        {
+          inlineData: {
+            data: base64Image,
+            mimeType: "image/png"
+          }
+        }
+      ];
+
+      console.log("Sending to Gemini API:", {
+        prompt: prompt,
+        hasImageData: !!base64Image,
+        imageDataLength: base64Image.length
+      });
+
+      const response = await model.generateContent(requestPayload);
+
+      console.log("Gemini API response:", response);
+
+      // Access the nested response structure
+      const candidates = response.response.candidates;
+      console.log("Response candidates:", candidates);
+      console.log("Number of candidates:", candidates?.length || 0);
+
+      // Check if response has the expected structure
+      if (!candidates || candidates.length === 0) {
+        console.error("No candidates in response");
+        alert("No image generated. Please try again.");
+        return;
+      }
+
+      if (!candidates[0].content || !candidates[0].content.parts) {
+        console.error("No content parts in response");
+        alert("No image generated. Please try again.");
+        return;
+      }
+
+      // Process the response
+      console.log("Processing response parts...");
+      console.log("Parts available:", candidates[0].content.parts?.length || 0);
+
+      for (const part of candidates[0].content.parts) {
+        console.log("Processing part:", part);
+        console.log("Part has inlineData:", !!part.inlineData);
+        console.log("Part has text:", !!part.text);
+
+        if (part.text) {
+          console.log("Part text content:", part.text);
+        }
+
+        if (part.inlineData) {
+          const generatedImageData = part.inlineData.data;
+          console.log("Found inline image data, length:", generatedImageData?.length || 0);
+
+          // Convert base64 to blob
+          const binaryString = atob(generatedImageData);
+          const bytes = new Uint8Array(binaryString.length);
+          for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+          }
+          const generatedBlob = new Blob([bytes], { type: 'image/png' });
+
+          // Create a local URL for immediate display
+          const localImageUrl = URL.createObjectURL(generatedBlob);
+          console.log("Generated image blob URL:", localImageUrl);
+
+          // Save the generated image to Supabase
+          console.log("Saving generated image to Supabase...");
+          const supabaseUrl = await uploadGeneratedImageToSupabase(generatedBlob);
+
+          setCanvasDrawingUrl(canvasDrawingUrl);
+
+          // Use Supabase URL if successful, otherwise use local URL
+          const finalImageUrl = supabaseUrl || localImageUrl;
+          setUploadedImageUrl(finalImageUrl);
+
+          console.log("Final image URL:", finalImageUrl);
+          console.log("Navigating to result page...");
+
+          navigate("/result", {
+            state: { canvasDrawingUrl, uploadedImageUrl: finalImageUrl },
+          });
+          return;
+        }
+      }
+
+      console.error("❌ No inline image data found in any response parts");
+      console.log("Available response structure:", JSON.stringify(response, null, 2));
+      alert("No image generated. The AI might have returned text instead of an image. Please try again.");
     } catch (e) {
-      console.error("Submit error", e);
+      console.error("Submit error details:", e);
+      console.error("Error message:", e.message);
+      console.error("Error stack:", e.stack);
+      alert(`Failed to generate image: ${e.message}. Please try again.`);
     } finally {
       setLoading(false);
     }
   };
 
-  const handlePromptSelect = (selected) => {
-    setPrompt(selected);
-    switch (selected) {
-      case "Space":
-        setSubPrompts([
-          "Astronaut floating near a space station.",
-          "Ringed planet with giant orbiting moons",
-          "Explorer on alien planet",
-          "Asteroid impacting a barren moon",
-        ]);
-        break;
-      case "Superhero":
-        setSubPrompts([
-          "Dynamic hero flying over city",
-          "Vigilante leaping across dark rooftops",
-          "Cosmic hero surfing a nebula",
-          "Superhero team in epic battle",
-        ]);
-        break;
-      case "Automobiles":
-        setSubPrompts([
-          "Classic muscle car racing down highway",
-          "Jumbo jet taking off from runway.",
-          "Cargo ship crossing the ocean.",
-          "Off-road adventure through rugged terrain",
-        ]);
-        break;
-      case "Anime":
-        setSubPrompts([
-          "Magical girl casting spells in moonlight",
-          "Mecha warrior defending Tokyo skyline",
-          "Samurai dueling in cherry blossom garden",
-          "School students discovering hidden powers",
-        ]);
-        break;
-      default:
-        setSubPrompts([]);
-    }
-    setSelectedSubPrompt("");
-  };
-
-  const handleSubPromptSelect = (p) => setSelectedSubPrompt(p);
-
-  const updateFinalPrompt = () => {
-    if (!selectedSubPrompt) return;
-    const lineArtText = lineArtImages.map((img) => img.text).join(" and ");
-    setFinalPrompt(`${lineArtText}, ${selectedSubPrompt}`);
-  };
 
   const toggleEraser = () => setEraserMode((v) => !v);
 
@@ -383,9 +495,6 @@ const DrawingApp = () => {
     setCurrentImageIndex(null);
   };
 
-  useEffect(() => {
-    handlePromptSelect("Superhero");
-  }, []);
 
   /* Prevent swipe navigation gestures and context menu globally */
   useEffect(() => {
@@ -573,45 +682,6 @@ const DrawingApp = () => {
                       onChange={handleResizeImage}
                       style={{ width: "100%" }}
                     />
-                  </div>
-                </div>
-                <h2 className="clasgg-h2">SELECT THEME</h2>
-                <div className="theme">
-                  <div className="mainthemcont">
-                    <div className="oggng">
-                      {["Superhero", "Space", "Automobiles", "Anime"].map((item) => {
-                        const isActive = prompt === item;
-                        return (
-                          <div
-                            key={item}
-                            onClick={() => handlePromptSelect(item)}
-                            className={`selecttheme-box ${
-                              isActive ? "is-active" : ""
-                            }`}
-                          >
-                            {item}
-                          </div>
-                        );
-                      })}
-                    </div>
-
-                    {subPrompts.length > 0 && (
-                      <div className="sub-prompts-contaier-main">
-                        <div className="sub-prompts-contaier-ff">
-                          {subPrompts.map((sp) => (
-                            <div
-                              key={sp}
-                              onClick={() => setSelectedSubPrompt(sp)}
-                              className={`sub-prompts-oopp ${
-                                selectedSubPrompt === sp ? "is-active" : ""
-                              }`}
-                            >
-                              {sp}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </div>
 

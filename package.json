@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.11.0",
+    "@google/generative-ai": "^0.24.1",
     "@supabase/supabase-js": "^2.45.3",
     "@tldraw/tldraw": "^3.3.2",
     "axios": "^1.7.7",
